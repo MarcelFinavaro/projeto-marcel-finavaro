@@ -269,6 +269,9 @@
                 </div>
             </main>
         </div>
+        <div class="bg-red-500 text-white p-4">
+        Tailwind está funcionando!
+        </div>
 
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>
