@@ -189,31 +189,6 @@ Implantação								X
 
 
 	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 4.1  CRONOGRAMA DE TAREFAS DETALHADO
 
 Semana	Atividade
@@ -253,6 +228,132 @@ A seguir, são apresentadas as ferramentas e tecnologias previstas para o desenv
 •	Acesso multiplataforma: qualquer dispositivo com conexão à internet
 
 
+🚗 Sistema de Cadastro de Clientes e Veículos
+Este projeto Laravel tem como objetivo gerenciar clientes e seus respectivos veículos, com estrutura pronta para expandir para ordens de serviço e geração de termos de garantia.
+
+🧱 Funcionalidades
+- Cadastro de clientes com nome, telefone e e-mail
+- Cadastro de veículos com placa, modelo, ano e vínculo com cliente
+- Relacionamento entre cliente e veículo
+- Validação de dados nos formulários
+- Interface Blade para cadastro
+
+⚙️ Requisitos
+- PHP >= 8.1
+- Composer
+- MySQL
+- Laravel >= 10
+- XAMPP ou similar (para ambiente local)
+
+🚀 Instalação
+git clone https://github.com/MarcelFinavaro/projeto-marcel-finavaro.git
+composer install
+php artisan key:generate
+php artisan migrate
+npm install && npm run dev
+
+
+
+🧩 Migrations
+Clientes
+Schema::create('clientes', function (Blueprint $table) {
+    $table->id();
+    $table->string('nome');
+    $table->string('telefone');
+    $table->string('email')->unique();
+    $table->timestamps();
+});
+
+
+Veículos
+Schema::create('veiculos', function (Blueprint $table) {
+    $table->string('placa')->primary();
+    $table->string('modelo');
+    $table->year('ano');
+    $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
+    $table->timestamps();
+});
+
+
+
+🧠 Models
+Cliente
+public function veiculos()
+{
+    return $this->hasMany(Veiculo::class);
+}
+
+
+Veículo
+protected $primaryKey = 'placa';
+public $incrementing = false;
+protected $keyType = 'string';
+
+public function cliente()
+{
+    return $this->belongsTo(Cliente::class);
+}
+
+
+
+🧭 Controllers
+Criar via terminal
+php artisan make:controller ClienteController --resource
+php artisan make:controller VeiculoController --resource
+
+
+Exemplo de método store() no VeiculoController
+public function store(Request $request)
+{
+    $request->validate([
+        'placa' => 'required|unique:veiculos',
+        'modelo' => 'required',
+        'ano' => 'required|digits:4',
+        'cliente_id' => 'required|exists:clientes,id',
+    ]);
+
+    Veiculo::create($request->all());
+    return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado!');
+}
+
+
+
+🖼️ Views
+Criar arquivos via terminal (PowerShell)
+ni resources\views\veiculos\create.blade.php
+ni resources\views\veiculos\index.blade.php
+ni resources\views\veiculos\edit.blade.php
+
+
+create.blade.php – Cadastro de Veículo
+
+
+
+🛣️ Rotas
+Route::resource('clientes', ClienteController::class);
+Route::resource('veiculos', VeiculoController::class);
+
+
+
+📂 Estrutura de Pastas Criadas
+- resources/views/veiculos/create.blade.php
+- resources/views/veiculos/index.blade.php
+- resources/views/veiculos/edit.blade.php
+
+📌 Próximos passos
+- Implementar listagem e edição de veículos
+- Criar cadastro de ordens de serviço
+- Gerar termo de garantia em PDF
+- Criar painel administrativo com autenticação
+
+👩‍💻 Autor
+Marcel Fernando Finavaro – Canoas/RS
+Projeto desenvolvido para TCC
+
+
+
+
+---
 
 
 
