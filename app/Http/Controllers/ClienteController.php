@@ -18,7 +18,9 @@ class ClienteController extends Controller
     // Exibe o formulário de cadastro
     public function create()
     {
-        return view('clientes.create');
+        $clientes = Cliente::all(); // ou o que fizer sentido no seu caso
+
+        return view('clientes.create', compact('clientes'));
     }
 
     // Salva o cliente no banco

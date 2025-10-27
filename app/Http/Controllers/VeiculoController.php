@@ -39,19 +39,47 @@ class VeiculoController extends Controller
         return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado com sucesso!');
     }
 
-    // Exibe o formulário de edição
-    public function edit(Veiculo $veiculo)
+    // Busca pela placa
+
+    public function buscar(Request $request)
     {
+        $placa = $request->input('placa');
+
+        $veiculos = Veiculo::where('placa', 'like', '%'.$placa.'%')->get();
+
+        return view('veiculos.resultado', compact('veiculos', 'placa'));
+    }
+
+    // Busca exata pela placa (usando como chave primária)
+    public function buscarPorPlaca(Request $request)
+    {
+        $placa = $request->input('placa');
+
+        $veiculo = Veiculo::find($placa); // busca direta pela chave primária
+
+        if ($veiculo) {
+            return view('veiculos.resultado-unico', compact('veiculo'));
+        } else {
+            return redirect()->back()->with('erro', 'Veículo não encontrado.');
+        }
+    }
+
+    // Exibe o formulário de edição
+    public function edit($placa)
+    {
+        $veiculo = Veiculo::findOrFail($placa);
         $clientes = Cliente::all();
 
         return view('veiculos.edit', compact('veiculo', 'clientes'));
     }
 
     // Atualiza os dados do veículo
-    public function update(Request $request, Veiculo $veiculo)
+    public function update(Request $request, $placa)
     {
+        $veiculo = Veiculo::findOrFail($placa);
+
         $request->validate([
-            'placa' => 'required|string|unique:veiculos,placa,'.$veiculo->id,
+            'placa' => 'required|string|unique:veiculos,placa,'.$veiculo->placa.',placa',
             'modelo' => 'required|string|max:255',
             'ano' => 'required|integer|min:1900|max:'.date('Y'),
             'cliente_id' => 'required|exists:clientes,id',
@@ -63,8 +91,9 @@ class VeiculoController extends Controller
     }
 
     // Exclui o veículo
-    public function destroy(Veiculo $veiculo)
+    public function destroy($placa)
     {
+        $veiculo = Veiculo::findOrFail($placa);
         $veiculo->delete();
 
         return redirect()->route('veiculos.index')->with('success', 'Veículo excluído com sucesso!');

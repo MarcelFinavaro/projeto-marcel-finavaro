@@ -1,31 +1,30 @@
-@extends('layouts.app') <!-- Se estiver usando um layout base -->
+@extends('layouts.app')
 
 @section('content')
-    <h1>Cadastrar Cliente</h1>
+    <h1>Cadastrar Novo Cliente</h1>
 
-    @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
-    @endif
-
-    @if($errors->any())
-        <ul style="color: red;">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+    @if ($errors->any())
+        <div style="color: red;">
+            <ul>
+                @foreach ($errors->all() as $erro)
+                    <li>{{ $erro }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 
     <form action="{{ route('clientes.store') }}" method="POST">
         @csrf
-        <label>Nome:</label>
-        <input type="text" name="nome" value="{{ old('nome') }}" required><br>
 
-        <label>Telefone:</label>
-        <input type="text" name="telefone" value="{{ old('telefone') }}" required><br>
+        <label for="nome">Nome:</label><br>
+        <input type="text" name="nome" value="{{ old('nome') }}"><br><br>
 
-        <label>Email:</label>
-        <input type="email" name="email" value="{{ old('email') }}" required><br>
+        <label for="telefone">Telefone:</label><br>
+        <input type="text" name="telefone" value="{{ old('telefone') }}"><br><br>
 
-        <button type="submit">Cadastrar</button>
+        <label for="email">E-mail:</label><br>
+        <input type="email" name="email" value="{{ old('email') }}"><br><br>
+
+        <button type="submit">Salvar</button>
     </form>
 @endsection
