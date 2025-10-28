@@ -1,66 +1,145 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+ # 🧾 Sistema Web de Gestão de Ordens de Serviço para Oficinas Mecânicas
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Projeto Tecnológico em Desenvolvimento de Sistemas**  
+**Autor:** Marcel Fernando Finavaro  
+**Contato:** marcelfinavaro@rede.ulbra.br
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📌 Objetivo do Sistema
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Este sistema tem como finalidade otimizar o gerenciamento de ordens de serviço em oficinas mecânicas, permitindo o cadastro de clientes e veículos, abertura e acompanhamento de ordens de serviço, geração de relatórios e controle de histórico por placa.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧩 Estrutura do Banco de Dados (MySQL)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### 🔹 Tabela: `clientes`
+>>>>>>> cadastro
 
-## Laravel Sponsors
+| Campo       | Tipo                | Chave | Observações                     |
+|-------------|---------------------|-------|----------------------------------|
+| `id`        | `bigint unsigned`   | PK    | Chave primária, auto incremento |
+| `nome`      | `varchar(255)`      |       | Nome completo do cliente        |
+| `telefone`  | `varchar(255)`      |       | Número de contato               |
+| `email`     | `varchar(255)`      | UNI   | E-mail único                    |
+| `created_at`| `timestamp`         |       | Data de criação                 |
+| `updated_at`| `timestamp`         |       | Data de atualização             |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+### 🔹 Tabela: `veiculos`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+| Campo        | Tipo                | Chave | Observações                          |
+|--------------|---------------------|-------|---------------------------------------|
+| `placa`      | `varchar(255)`      | PK    | Identificador único do veículo        |
+| `modelo`     | `varchar(255)`      |       | Modelo do veículo                     |
+| `marca`      | `varchar(255)`      |       | Marca do veículo                      |
+| `ano`        | `year(4)`           |       | Ano de fabricação                     |
+| `cliente_id` | `bigint unsigned`   | FK    | Relaciona com `clientes.id`           |
+| `created_at` | `timestamp`         |       | Data de criação                       |
+| `updated_at` | `timestamp`         |       | Data de atualização                   |
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 🔹 Tabela: `ordem_servicos`
 
-## Code of Conduct
+| Campo         | Tipo                | Chave | Observações                          |
+|---------------|---------------------|-------|---------------------------------------|
+| `id`          | `bigint unsigned`   | PK    | Chave primária, auto incremento       |
+| `cliente_id`  | `bigint unsigned`   | FK    | Relaciona com `clientes.id`           |
+| `veiculo_id`  | `varchar(255)`      |       | Refere-se à `veiculos.placa`          |
+| `descricao`   | `text`              |       | Detalhes sobre o serviço              |
+| `data_servico`| `date`              |       | Data de realização do serviço         |
+| `created_at`  | `timestamp`         |       | Data de criação                       |
+| `updated_at`  | `timestamp`         |       | Data de atualização                   |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🔗 Relacionamentos entre Tabelas
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **Cliente → Veículo:** Um cliente pode ter vários veículos (`1:N`)
+- **Cliente → Ordem de Serviço:** Um cliente pode ter várias OS (`1:N`)
+- **Veículo → Ordem de Serviço:** Cada OS está associada a um veículo (`N:1`)
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📋 Funcionalidades do Sistema
+
+### 🔐 Login
+- Autenticação de usuários com login e senha
+- Sessão segura e criptografia de senhas
+
+### 👤 Cadastro de Clientes
+- Registro de nome, telefone e e-mail
+- Validação de e-mail único
+
+### 🚗 Cadastro de Veículos
+- Associação de veículos a clientes
+- Validação de placa e dados do veículo
+
+### 🧾 Abertura de Ordem de Serviço
+- Seleção de cliente e veículo
+- Registro de descrição e data do serviço
+- Status inicial: "Aberta"
+
+### 🔄 Atualização de Status
+- Alteração para "Em andamento", "Concluída" ou "Cancelada"
+- Registro de data/hora da atualização
+
+### 🔍 Consulta por Placa
+- Histórico completo de OS vinculadas à placa
+- Filtros por data, status e tipo
+
+### 📊 Relatórios Gerenciais
+- Geração de gráficos e tabelas
+- Exportação em PDF
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### Backend
+- PHP
+- Laravel
+- XAMPP
+
+### Banco de Dados
+- MySQL
+- phpMyAdmin
+
+### Frontend
+- HTML, CSS, JavaScript
+- Design responsivo
+
+### Segurança
+- Autenticação e criptografia
+- Controle de sessão
+
+### Controle de Versão
+- Git
+- GitHub
+
+### Compatibilidade
+- Navegadores: Chrome, Firefox
+- Acesso multiplataforma
+
+---
+
+## 📅 Cronograma de Desenvolvimento
+
+| Semana | Atividade |
+|--------|-----------|
+| 1ª | Levantamento de requisitos |
+| 2ª | Modelagem de dados e diagramas |
+| 3ª | Desenvolvimento do backend |
+| 4ª | Desenvolvimento do frontend |
+| 5ª | Integração entre camadas |
+| 6ª | Testes e correções |
+| 7ª | Relatórios e exportação PDF |
+| 8ª | Documentação e entrega final |
+
+---
+
+> Este README documenta a estrutura e funcionalidades reais do sistema, servindo como referência técnica para desenvolvedores, avaliadores e usuários.
