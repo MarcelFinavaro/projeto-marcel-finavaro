@@ -11,7 +11,7 @@
         </ul>
     @endif
 
-    <form action="{{ route('clientes.update', $cliente->id) }}" method="POST">
+        <form action="{{ route('clientes.update', $cliente->cpf) }}" method="POST">
         @csrf
         @method('PUT')
 

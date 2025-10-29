@@ -9,10 +9,19 @@ class Cliente extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nome', 'telefone', 'email'];
+    protected $primaryKey = 'cpf';              // Define 'cpf' como chave primária
+    public $incrementing = false;               // Chave primária não é auto-incrementável
+    protected $keyType = 'string';              // Tipo da chave primária é string
+
+    protected $fillable = ['cpf', 'nome', 'telefone', 'email'];
 
     public function veiculos()
     {
-        return $this->hasMany(Veiculo::class);
+        return $this->hasMany(Veiculo::class, 'cliente_cpf', 'cpf');
+    }
+
+    public function ordens()
+    {
+        return $this->hasMany(OrdemServico::class, 'cliente_cpf', 'cpf');
     }
 }

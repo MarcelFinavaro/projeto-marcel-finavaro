@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->string('placa')->primary(); // chave primária
             $table->string('modelo');
             $table->year('ano');
-            $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
+            $table->string('cliente_cpf');
+            $table->foreign('cliente_cpf')->references('cpf')->on('clientes')->onDelete('cascade');
             $table->timestamps();
         });
     }

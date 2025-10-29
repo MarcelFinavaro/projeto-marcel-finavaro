@@ -14,6 +14,7 @@ use Twilio\Rest\Client;
 
 class OrdemServicoController extends Controller
 {
+    // Lista todas as ordens com cliente e veículo
     public function index()
     {
         $ordens = OrdemServico::with(['cliente', 'veiculo'])->get();
@@ -21,6 +22,7 @@ class OrdemServicoController extends Controller
         return view('ordens.index', compact('ordens'));
     }
 
+    // Exibe o formulário de criação
     public function create()
     {
         $clientes = Cliente::all();
@@ -29,55 +31,68 @@ class OrdemServicoController extends Controller
         return view('ordens.create', compact('clientes', 'veiculos'));
     }
 
+    // Salva uma nova ordem de serviço
     public function store(Request $request)
     {
         $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
-            'veiculo_id' => 'required|exists:veiculos,placa',
+            'cliente_cpf' => 'required|exists:clientes,cpf',
+            'veiculo_placa' => 'required|exists:veiculos,placa',
             'descricao' => 'required|string|max:1000',
             'data_servico' => 'required|date',
         ]);
 
-        OrdemServico::create([
-            'cliente_id' => $request->cliente_id,
-            'veiculo_id' => $request->veiculo_id,
-            'descricao' => $request->descricao,
-            'data_servico' => $request->data_servico,
-        ]);
+        OrdemServico::create($request->only([
+            'cliente_cpf',
+            'veiculo_placa',
+            'descricao',
+            'data_servico',
+        ]));
 
         return redirect()->route('ordens.index')->with('success', 'Ordem de serviço cadastrada com sucesso!');
     }
 
-    public function edit(OrdemServico $ordem)
+    // Exibe o formulário de edição
+    public function edit($id)
     {
+        $ordem = OrdemServico::findOrFail($id);
         $clientes = Cliente::all();
         $veiculos = Veiculo::all();
 
         return view('ordens.edit', compact('ordem', 'clientes', 'veiculos'));
     }
 
-    public function update(Request $request, OrdemServico $ordem)
+    // Atualiza os dados da ordem
+    public function update(Request $request, $id)
     {
+        $ordem = OrdemServico::findOrFail($id);
+
         $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
-            'veiculo_id' => 'required|exists:veiculos,placa',
+            'cliente_cpf' => 'required|exists:clientes,cpf',
+            'veiculo_placa' => 'required|exists:veiculos,placa',
             'descricao' => 'required|string|max:1000',
             'data_servico' => 'required|date',
         ]);
 
-        $ordem->update($request->all());
+        $ordem->update($request->only([
+            'cliente_cpf',
+            'veiculo_placa',
+            'descricao',
+            'data_servico',
+        ]));
 
         return redirect()->route('ordens.index')->with('success', 'Ordem de serviço atualizada com sucesso!');
     }
 
-    public function destroy(OrdemServico $ordem)
+    // Exclui a ordem de serviço
+    public function destroy($id)
     {
+        $ordem = OrdemServico::findOrFail($id);
         $ordem->delete();
 
         return redirect()->route('ordens.index')->with('success', 'Ordem de serviço excluída com sucesso!');
     }
 
-    // ✅ Gera o PDF
+    // Gera o PDF do relatório
     public function gerarRelatorioPDF()
     {
         $ordens = OrdemServico::with(['cliente', 'veiculo'])->get();
@@ -96,7 +111,7 @@ class OrdemServicoController extends Controller
             ->header('Content-Disposition', 'attachment; filename="relatorio_ordens.pdf"');
     }
 
-    // ✅ Envia o PDF por e-mail
+    // Envia o relatório por e-mail
     public function enviarRelatorioPorEmail()
     {
         Mail::to('destinatario@example.com')->send(new RelatorioOrdensMail());
@@ -104,7 +119,7 @@ class OrdemServicoController extends Controller
         return redirect()->route('ordens.index')->with('success', 'Relatório enviado por e-mail!');
     }
 
-    // ✅ Envia o link do PDF por WhatsApp (Twilio)
+    // Envia o relatório por WhatsApp via Twilio
     public function enviarRelatorioPorWhatsApp()
     {
         $ordens = OrdemServico::with(['cliente', 'veiculo'])->get();

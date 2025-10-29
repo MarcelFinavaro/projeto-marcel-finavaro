@@ -24,6 +24,7 @@
                         <th class="px-4 py-2 border-b">Descrição</th>
                         <th class="px-4 py-2 border-b">Data</th>
                         <th class="px-4 py-2 border-b">Veículo</th>
+                        <th class="px-4 py-2 border-b">Cliente</th>
                         <th class="px-4 py-2 border-b">Ações</th>
                     </tr>
                 </thead>
@@ -38,6 +39,13 @@
                                     {{ $ordem->veiculo->placa }} - {{ $ordem->veiculo->modelo }}
                                 @else
                                     <em>Veículo não encontrado</em>
+                                @endif
+                            </td>
+                            <td class="px-4 py-2">
+                                @if($ordem->cliente)
+                                    {{ $ordem->cliente->nome }} ({{ $ordem->cliente_cpf }})
+                                @else
+                                    <em>Cliente não encontrado</em>
                                 @endif
                             </td>
                             <td class="px-4 py-2 space-x-2">

@@ -9,27 +9,29 @@ class Veiculo extends Model
 {
     use HasFactory;
 
-    // Define que a chave primária é 'placa'
+    // Define que a chave primária da tabela 'veiculos' é o campo 'placa'
     protected $primaryKey = 'placa';
 
-    // Indica que a chave primária não é auto-incrementável
+    // Indica que a chave primária não é auto-incrementável (como um ID numérico)
     public $incrementing = false;
 
-    // Define o tipo da chave primária como string
+    // Define o tipo da chave primária como string (placa é texto)
     protected $keyType = 'string';
 
-    // Campos que podem ser preenchidos em massa
-    protected $fillable = ['placa', 'modelo', 'marca', 'ano', 'cliente_id'];
+    // Campos que podem ser preenchidos em massa (via create ou update)
+    protected $fillable = ['placa', 'modelo', 'marca', 'ano', 'cliente_cpf'];
 
-    // Relacionamento com Cliente
+    // Relacionamento: um veículo pertence a um cliente
+    // Usa 'cliente_cpf' como chave estrangeira que aponta para 'cpf' na tabela 'clientes'
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class);
+        return $this->belongsTo(Cliente::class, 'cliente_cpf', 'cpf');
     }
 
-    // Relacionamento com Ordens de Serviço
+    // Relacionamento: um veículo pode ter várias ordens de serviço
+    // Usa 'veiculo_placa' como chave estrangeira na tabela 'ordem_servicos'
     public function ordens()
     {
-        return $this->hasMany(OrdemServico::class, 'veiculo_id', 'placa');
+        return $this->hasMany(OrdemServico::class, 'veiculo_placa', 'placa');
     }
 }

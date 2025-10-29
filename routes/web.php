@@ -36,7 +36,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('ordens', OrdemServicoController::class)->parameters([
         'ordens' => 'ordem',
     ]);
-
     // Relatórios
     Route::get('/relatorios', [RelatorioController::class, 'index'])->name('relatorios.index');
 });

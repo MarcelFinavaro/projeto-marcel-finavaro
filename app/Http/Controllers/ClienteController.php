@@ -18,15 +18,14 @@ class ClienteController extends Controller
     // Exibe o formulário de cadastro
     public function create()
     {
-        $clientes = Cliente::all(); // ou o que fizer sentido no seu caso
-
-        return view('clientes.create', compact('clientes'));
+        return view('clientes.create');
     }
 
     // Salva o cliente no banco
     public function store(Request $request)
     {
         $request->validate([
+            'cpf' => 'required|string|unique:clientes,cpf',
             'nome' => 'required|string|max:255',
             'telefone' => 'required|string|max:20',
             'email' => 'required|email|unique:clientes,email',
@@ -38,18 +37,22 @@ class ClienteController extends Controller
     }
 
     // Exibe o formulário de edição
-    public function edit(Cliente $cliente)
+    public function edit($cpf)
     {
+        $cliente = Cliente::findOrFail($cpf);
+
         return view('clientes.edit', compact('cliente'));
     }
 
     // Atualiza os dados do cliente
-    public function update(Request $request, Cliente $cliente)
+    public function update(Request $request, $cpf)
     {
+        $cliente = Cliente::findOrFail($cpf);
+
         $request->validate([
             'nome' => 'required|string|max:255',
             'telefone' => 'required|string|max:20',
-            'email' => 'required|email|unique:clientes,email,'.$cliente->id,
+            'email' => 'required|email|unique:clientes,email,'.$cliente->cpf.',cpf',
         ]);
 
         $cliente->update($request->all());
@@ -58,8 +61,9 @@ class ClienteController extends Controller
     }
 
     // Exclui o cliente
-    public function destroy(Cliente $cliente)
+    public function destroy($cpf)
     {
+        $cliente = Cliente::findOrFail($cpf);
         $cliente->delete();
 
         return redirect()->route('clientes.index')->with('success', 'Cliente excluído com sucesso!');

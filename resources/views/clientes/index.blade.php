@@ -20,7 +20,7 @@
             <table class="table-auto w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white">
-                        <th class="px-4 py-2 border-b">ID</th>
+                        <th class="px-4 py-2 border-b">CPF</th>
                         <th class="px-4 py-2 border-b">Nome</th>
                         <th class="px-4 py-2 border-b">Telefone</th>
                         <th class="px-4 py-2 border-b">Ações</th>
@@ -29,15 +29,15 @@
                 <tbody>
                     @foreach ($clientes as $cliente)
                         <tr class="text-gray-700 dark:text-gray-300 border-b dark:border-gray-600">
-                            <td class="px-4 py-2">{{ $cliente->id }}</td>
+                            <td class="px-4 py-2">{{ $cliente->cpf }}</td>
                             <td class="px-4 py-2">{{ $cliente->nome }}</td>
                             <td class="px-4 py-2">{{ $cliente->telefone }}</td>
                             <td class="px-4 py-2 space-x-2">
-                                <a href="{{ route('clientes.edit', $cliente->id) }}"
+                                <a href="{{ route('clientes.edit', $cliente->cpf) }}"
                                    class="px-3 py-1 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full shadow hover:bg-gray-400 dark:hover:bg-gray-600 transition">
                                    ✏️ Editar
                                 </a>
-                                <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" style="display:inline-block;">
+                                <form action="{{ route('clientes.destroy', $cliente->cpf) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
