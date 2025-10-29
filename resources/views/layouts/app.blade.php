@@ -73,20 +73,35 @@
                 transmitindo profissionalismo e organização para seus clientes.
             </p>
         </section>
+            @php
+            use Illuminate\Support\Facades\Route;
+              @endphp
 
-        @auth
-        <!-- Campo de pesquisa por placa -->
-        <div class="flex justify-center items-center mb-8">
-            <form action="{{ route('veiculo.buscar') }}" method="GET"
-                class="flex flex-col items-center gap-3 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-xs">
-                <input type="text" name="placa" maxlength="8" placeholder="Digite a placa" required
-                    class="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white">
-                <button type="submit"
-                    class="w-32 px-3 py-2 bg-orange-500 text-white text-sm font-semibold rounded-md hover:bg-orange-600 transition">
-                    🔍 Pesquisar
-                </button>
-            </form>
-        </div>
+             @auth
+            @if (Route::currentRouteName() === 'veiculos.index')
+                <!-- Cabeçalho da seção de busca -->
+                <section class="text-center my-6">
+                    <h2 class="text-xl sm:text-2xl font-bold text-orange-500 mb-2">
+                        🔍 Buscar veículo por placa
+                    </h2>
+                    <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-4">
+                        Digite a placa do veículo para localizar rapidamente no sistema.
+                    </p>
+                </section>
+
+                <!-- Campo de pesquisa por placa -->
+                <div class="flex justify-center items-center mb-8">
+                    <form action="{{ route('veiculo.buscar') }}" method="GET"
+                        class="flex flex-col items-center gap-3 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-xs">
+                        <input type="text" name="placa" maxlength="8" placeholder="Digite a placa" required
+                            class="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white">
+                        <button type="submit"
+                            class="w-32 px-3 py-2 bg-orange-500 text-white text-sm font-semibold rounded-md hover:bg-orange-600 transition">
+                            🔍 Pesquisar
+                        </button>
+                    </form>
+                </div>
+            @endif
         @endauth
 
         <!-- Conteúdo da página -->

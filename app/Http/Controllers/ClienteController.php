@@ -68,4 +68,24 @@ class ClienteController extends Controller
 
         return redirect()->route('clientes.index')->with('success', 'Cliente excluído com sucesso!');
     }
+
+    // Busca cliente por nome
+    public function buscarPorNome(Request $request)
+    {
+        $nome = $request->input('nome');
+
+        $clientes = Cliente::where('nome', 'like', '%'.$nome.'%')->get();
+
+        return view('clientes.index', compact('clientes'));
+    }
+
+    // Busca cliente por CPF
+    public function buscarPorCPF(Request $request)
+    {
+        $cpf = $request->input('cpf');
+
+        $clientes = Cliente::where('cpf', $cpf)->get();
+
+        return view('clientes.index', compact('clientes'));
+    }
 }

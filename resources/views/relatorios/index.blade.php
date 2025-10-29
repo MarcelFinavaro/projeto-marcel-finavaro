@@ -15,7 +15,21 @@
             </a>
         </div>
 
-        <!-- Exemplo de outro relatório -->
+        <!-- Card de Relatório por Placa -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+            <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Relatório por Placa</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">Digite a placa do veículo para gerar um relatório completo.</p>
+            <form method="GET" onsubmit="this.action='/relatorios/veiculo/' + this.placa.value">
+                <input type="text" name="placa" placeholder="Digite a placa" required
+                    class="w-full mb-3 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white">
+                <button type="submit"
+                    class="w-full px-5 py-2 bg-orange-500 text-white rounded-full shadow hover:bg-orange-600 transition">
+                    📄 Gerar Relatório
+                </button>
+            </form>
+        </div>
+
+        <!-- Card de Relatório de Clientes (em breve) -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
             <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Relatório de Clientes</h2>
             <p class="text-gray-700 dark:text-gray-300 mb-4">(Exemplo) Relatório com dados dos clientes cadastrados.</p>

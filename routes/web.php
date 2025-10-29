@@ -24,6 +24,8 @@ Route::get('/dashboard', function () {
 // Rotas protegidas por autenticação
 Route::middleware('auth')->group(function () {
     // Perfil do usuário
+    Route::get('/clientes/buscar/nome', [ClienteController::class, 'buscarPorNome'])->name('clientes.buscar.nome');
+    Route::get('/clientes/buscar/cpf', [ClienteController::class, 'buscarPorCPF'])->name('clientes.buscar.cpf');
     Route::get('/buscar-veiculo', [VeiculoController::class, 'buscarPorPlaca'])->name('veiculo.buscar');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -31,6 +33,7 @@ Route::middleware('auth')->group(function () {
 
     // Recursos principais
     Route::get('/ordens/relatorio/pdf', [OrdemServicoController::class, 'gerarRelatorioPDF'])->name('ordens.relatorio.pdf');
+    Route::get('/relatorios/veiculo/{placa}', [RelatorioController::class, 'veiculoPorPlaca'])->name('relatorios.veiculo.placa');
     Route::resource('clientes', ClienteController::class);
     Route::resource('veiculos', VeiculoController::class);
     Route::resource('ordens', OrdemServicoController::class)->parameters([

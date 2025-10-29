@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto mt-8">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Ordens de Serviço</h2>
+    <h1 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">🧾 Ordens de Serviço</h1>
 
     @if (session('success'))
         <div class="mb-4 px-4 py-2 bg-green-100 text-green-800 rounded-full shadow">
@@ -11,8 +11,8 @@
     @endif
 
     <a href="{{ route('ordens.create') }}"
-       class="inline-block mb-4 px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full shadow hover:bg-gray-400 dark:hover:bg-gray-600 transition">
-       ➕ Nova Ordem de Serviço
+       class="inline-block mb-6 px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full shadow hover:bg-gray-400 dark:hover:bg-gray-600 transition">
+       ➕ Nova Ordem
     </a>
 
     @if ($ordens->count())
@@ -21,10 +21,10 @@
                 <thead>
                     <tr class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white">
                         <th class="px-4 py-2 border-b">ID</th>
-                        <th class="px-4 py-2 border-b">Descrição</th>
-                        <th class="px-4 py-2 border-b">Data</th>
-                        <th class="px-4 py-2 border-b">Veículo</th>
                         <th class="px-4 py-2 border-b">Cliente</th>
+                        <th class="px-4 py-2 border-b">Veículo</th>
+                        <th class="px-4 py-2 border-b">Data</th>
+                        <th class="px-4 py-2 border-b">Status</th>
                         <th class="px-4 py-2 border-b">Ações</th>
                     </tr>
                 </thead>
@@ -32,34 +32,21 @@
                     @foreach ($ordens as $ordem)
                         <tr class="text-gray-700 dark:text-gray-300 border-b dark:border-gray-600">
                             <td class="px-4 py-2">{{ $ordem->id }}</td>
-                            <td class="px-4 py-2">{{ $ordem->descricao }}</td>
-                            <td class="px-4 py-2">{{ \Carbon\Carbon::parse($ordem->data_servico)->format('d/m/Y') }}</td>
-                            <td class="px-4 py-2">
-                                @if($ordem->veiculo)
-                                    {{ $ordem->veiculo->placa }} - {{ $ordem->veiculo->modelo }}
-                                @else
-                                    <em>Veículo não encontrado</em>
-                                @endif
-                            </td>
-                            <td class="px-4 py-2">
-                                @if($ordem->cliente)
-                                    {{ $ordem->cliente->nome }} ({{ $ordem->cliente_cpf }})
-                                @else
-                                    <em>Cliente não encontrado</em>
-                                @endif
-                            </td>
+                            <td class="px-4 py-2">{{ $ordem->cliente->nome ?? '—' }}</td>
+                            <td class="px-4 py-2">{{ $ordem->veiculo->modelo ?? '—' }} ({{ $ordem->veiculo->placa ?? '' }})</td>
+                            <td class="px-4 py-2">{{ \Carbon\Carbon::parse($ordem->data)->format('d/m/Y') }}</td>
+                            <td class="px-4 py-2 capitalize">{{ $ordem->status }}</td>
                             <td class="px-4 py-2 space-x-2">
                                 <a href="{{ route('ordens.edit', $ordem->id) }}"
                                    class="px-3 py-1 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full shadow hover:bg-gray-400 dark:hover:bg-gray-600 transition">
                                    ✏️ Editar
                                 </a>
-
-                                <form action="{{ route('ordens.destroy', $ordem->id) }}" method="POST" style="display:inline-block;">
+                                <form action="{{ route('ordens.destroy', $ordem->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
                                         class="px-3 py-1 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full shadow hover:bg-gray-400 dark:hover:bg-gray-600 transition"
-                                        onclick="return confirm('Tem certeza que deseja excluir?')">
+                                        onclick="return confirm('Tem certeza que deseja excluir esta ordem?')">
                                         🗑️ Excluir
                                     </button>
                                 </form>

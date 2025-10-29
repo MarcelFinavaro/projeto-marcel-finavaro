@@ -1,13 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>Criar Ordem de Serviço</h2>
+<div class="container mx-auto mt-8 max-w-xl">
+    <h2 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">➕ Nova Ordem de Serviço</h2>
 
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Erro!</strong> Corrija os campos abaixo:
-            <ul>
+        <div class="mb-4 bg-red-100 text-red-800 px-4 py-2 rounded shadow">
+            <ul class="list-disc pl-5">
                 @foreach ($errors->all() as $erro)
                     <li>{{ $erro }}</li>
                 @endforeach
@@ -15,12 +14,15 @@
         </div>
     @endif
 
-    <form action="{{ route('ordens.store') }}" method="POST">
+    <form action="{{ route('ordens.store') }}" method="POST" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md space-y-4">
         @csrf
 
-        <div class="mb-3">
-            <label for="cliente_id" class="form-label">Cliente</label>
-            <select name="cliente_id" class="form-select" required>
+        <!-- Cliente -->
+        <div>
+            <label for="cliente_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cliente:</label>
+            <select name="cliente_id" id="cliente_id" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white">
+                <option value="">Selecione um cliente</option>
                 @foreach ($clientes as $cliente)
                     <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
                         {{ $cliente->nome }}
@@ -29,29 +31,52 @@
             </select>
         </div>
 
-        <div class="mb-3">
-            <label for="veiculo_id" class="form-label">Veículo</label>
-            <select name="veiculo_id" class="form-select" required>
+        <!-- Veículo -->
+        <div>
+            <label for="veiculo_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Veículo:</label>
+            <select name="veiculo_id" id="veiculo_id" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white">
+                <option value="">Selecione um veículo</option>
                 @foreach ($veiculos as $veiculo)
-                    <option value="{{ $veiculo->placa }}" {{ old('veiculo_id') == $veiculo->placa ? 'selected' : '' }}>
-                        {{ $veiculo->placa }} - {{ $veiculo->modelo }}
+                    <option value="{{ $veiculo->id }}" {{ old('veiculo_id') == $veiculo->id ? 'selected' : '' }}>
+                        {{ $veiculo->modelo }} - {{ $veiculo->placa }}
                     </option>
                 @endforeach
             </select>
         </div>
 
-        <div class="mb-3">
-            <label for="descricao" class="form-label">Descrição</label>
-            <input type="text" name="descricao" class="form-control" value="{{ old('descricao') }}" required>
+        <!-- Descrição -->
+        <div>
+            <label for="descricao" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Descrição:</label>
+            <textarea name="descricao" id="descricao" rows="4" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white">{{ old('descricao') }}</textarea>
         </div>
 
-        <div class="mb-3">
-            <label for="data_servico" class="form-label">Data</label>
-            <input type="date" name="data_servico" class="form-control" value="{{ old('data_servico') }}" required>
+        <!-- Status -->
+        <div>
+            <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status:</label>
+            <select name="status" id="status" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white">
+                <option value="aberta" {{ old('status') == 'aberta' ? 'selected' : '' }}>Aberta</option>
+                <option value="em andamento" {{ old('status') == 'em andamento' ? 'selected' : '' }}>Em andamento</option>
+                <option value="concluída" {{ old('status') == 'concluída' ? 'selected' : '' }}>Concluída</option>
+            </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Salvar</button>
-        <a href="{{ route('ordens.index') }}" class="btn btn-secondary">Cancelar</a>
+        <!-- Data -->
+        <div>
+            <label for="data" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Data:</label>
+            <input type="date" name="data" id="data" required value="{{ old('data') }}"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white">
+        </div>
+
+        <!-- Botão de envio -->
+        <div class="text-center">
+            <button type="submit"
+                class="px-6 py-2 bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-600 transition">
+                💾 Salvar Ordem
+            </button>
+        </div>
     </form>
 </div>
 @endsection
