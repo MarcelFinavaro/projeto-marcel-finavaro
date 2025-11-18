@@ -1,145 +1,162 @@
 
-
-
- # 🧾 Sistema Web de Gestão de Ordens de Serviço para Oficinas Mecânicas
+# 🧾 Sistema Web de Gestão de Ordens de Serviço para Oficinas Mecânicas
 
 **Projeto Tecnológico em Desenvolvimento de Sistemas**  
 **Autor:** Marcel Fernando Finavaro  
-**Contato:** marcelfinavaro@rede.ulbra.br
+**Contato:** marcelfinavaro@rede.ulbra.br  
 
 ---
 
-## 📌 Objetivo do Sistema
+## 📌 Sobre o Projeto
+Sistema web desenvolvido para otimizar a gestão de ordens de serviço (OS) em oficinas mecânicas, permitindo:
 
-Este sistema tem como finalidade otimizar o gerenciamento de ordens de serviço em oficinas mecânicas, permitindo o cadastro de clientes e veículos, abertura e acompanhamento de ordens de serviço, geração de relatórios e controle de histórico por placa.
+- Cadastro de clientes e veículos
+- Abertura e acompanhamento de ordens de serviço
+- Histórico por placa
+- Geração de relatórios
+- Interface simples e responsiva
+
+---
 
 ## 🧩 Estrutura do Banco de Dados (MySQL)
 
 ### 🔹 Tabela: `clientes`
->>>>>>> cadastro
-
-| Campo       | Tipo                | Chave | Observações                     |
-|-------------|---------------------|-------|----------------------------------|
-| `id`        | `bigint unsigned`   | PK    | Chave primária, auto incremento |
-| `nome`      | `varchar(255)`      |       | Nome completo do cliente        |
-| `telefone`  | `varchar(255)`      |       | Número de contato               |
-| `email`     | `varchar(255)`      | UNI   | E-mail único                    |
-| `created_at`| `timestamp`         |       | Data de criação                 |
-| `updated_at`| `timestamp`         |       | Data de atualização             |
+| Campo       | Tipo              | Chave | Observações                     |
+|-------------|-------------------|-------|----------------------------------|
+| id          | bigint unsigned   | PK    | Auto incremento                 |
+| nome        | varchar(255)      |       | Nome completo do cliente        |
+| telefone    | varchar(255)      |       | Número de contato               |
+| email       | varchar(255)      | UNI   | E-mail único                    |
+| created_at  | timestamp         |       | Criado em                       |
+| updated_at  | timestamp         |       | Atualizado em                   |
 
 ---
 
 ### 🔹 Tabela: `veiculos`
-
-| Campo        | Tipo                | Chave | Observações                          |
-|--------------|---------------------|-------|---------------------------------------|
-| `placa`      | `varchar(255)`      | PK    | Identificador único do veículo        |
-| `modelo`     | `varchar(255)`      |       | Modelo do veículo                     |
-| `marca`      | `varchar(255)`      |       | Marca do veículo                      |
-| `ano`        | `year(4)`           |       | Ano de fabricação                     |
-| `cliente_id` | `bigint unsigned`   | FK    | Relaciona com `clientes.id`           |
-| `created_at` | `timestamp`         |       | Data de criação                       |
-| `updated_at` | `timestamp`         |       | Data de atualização                   |
+| Campo        | Tipo              | Chave | Observações                          |
+|--------------|-------------------|-------|---------------------------------------|
+| placa        | varchar(255)      | PK    | Identificador único do veículo        |
+| modelo       | varchar(255)      |       | Modelo do veículo                     |
+| marca        | varchar(255)      |       | Marca do veículo                      |
+| ano          | year(4)           |       | Ano de fabricação                     |
+| cliente_id   | bigint unsigned   | FK    | Relaciona com clientes.id             |
+| created_at   | timestamp         |       | Criado em                             |
+| updated_at   | timestamp         |       | Atualizado em                         |
 
 ---
 
 ### 🔹 Tabela: `ordem_servicos`
-
-| Campo         | Tipo                | Chave | Observações                          |
-|---------------|---------------------|-------|---------------------------------------|
-| `id`          | `bigint unsigned`   | PK    | Chave primária, auto incremento       |
-| `cliente_id`  | `bigint unsigned`   | FK    | Relaciona com `clientes.id`           |
-| `veiculo_id`  | `varchar(255)`      |       | Refere-se à `veiculos.placa`          |
-| `descricao`   | `text`              |       | Detalhes sobre o serviço              |
-| `data_servico`| `date`              |       | Data de realização do serviço         |
-| `created_at`  | `timestamp`         |       | Data de criação                       |
-| `updated_at`  | `timestamp`         |       | Data de atualização                   |
+| Campo         | Tipo              | Chave | Observações                          |
+|---------------|-------------------|-------|---------------------------------------|
+| id            | bigint unsigned   | PK    | Auto incremento                       |
+| cliente_id    | bigint unsigned   | FK    | Relaciona com clientes.id             |
+| veiculo_id    | varchar(255)      | FK    | Relaciona com veiculos.placa          |
+| descricao     | text              |       | Detalhes do serviço                   |
+| data_servico  | date              |       | Data de execução                      |
+| created_at    | timestamp         |       | Criado em                             |
+| updated_at    | timestamp         |       | Atualizado em                         |
 
 ---
 
 ## 🔗 Relacionamentos entre Tabelas
-
-- **Cliente → Veículo:** Um cliente pode ter vários veículos (`1:N`)
-- **Cliente → Ordem de Serviço:** Um cliente pode ter várias OS (`1:N`)
-- **Veículo → Ordem de Serviço:** Cada OS está associada a um veículo (`N:1`)
+| Entidade | Relacionamento | Descrição |
+|----------|----------------|-----------|
+| Cliente → Veículo | 1:N | Um cliente possui vários veículos |
+| Cliente → Ordem de Serviço | 1:N | Um cliente possui várias OS |
+| Veículo → Ordem de Serviço | 1:N | Cada OS está vinculada a um veículo |
 
 ---
 
-## 📋 Funcionalidades do Sistema
+## 📋 Funcionalidades
 
-### 🔐 Login
-- Autenticação de usuários com login e senha
-- Sessão segura e criptografia de senhas
+### 🔐 Autenticação
+- Login seguro com hash de senha
+- Proteção por sessão
 
-### 👤 Cadastro de Clientes
-- Registro de nome, telefone e e-mail
+### 👤 Clientes
+- CRUD completo
 - Validação de e-mail único
 
-### 🚗 Cadastro de Veículos
-- Associação de veículos a clientes
-- Validação de placa e dados do veículo
+### 🚗 Veículos
+- Cadastro vinculado ao cliente
+- Busca por placa
 
-### 🧾 Abertura de Ordem de Serviço
-- Seleção de cliente e veículo
-- Registro de descrição e data do serviço
-- Status inicial: "Aberta"
+### 🧾 Ordem de Serviço
+- Chamados com status
+- Lista, edição e acompanhamento
+- Histórico por veículo
 
-### 🔄 Atualização de Status
-- Alteração para "Em andamento", "Concluída" ou "Cancelada"
-- Registro de data/hora da atualização
+### 🔍 Pesquisas e Filtros
+- Por placa
+- Por cliente
+- Por status
+- Por período
 
-### 🔍 Consulta por Placa
-- Histórico completo de OS vinculadas à placa
-- Filtros por data, status e tipo
-
-### 📊 Relatórios Gerenciais
-- Geração de gráficos e tabelas
-- Exportação em PDF
+### 📊 Relatórios
+- Exportação PDF
+- Visão administrativa
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-### Backend
-- PHP
-- Laravel
-- XAMPP
-
-### Banco de Dados
-- MySQL
-- phpMyAdmin
-
-### Frontend
-- HTML, CSS, JavaScript
-- Design responsivo
-
-### Segurança
-- Autenticação e criptografia
-- Controle de sessão
-
-### Controle de Versão
-- Git
-- GitHub
-
-### Compatibilidade
-- Navegadores: Chrome, Firefox
-- Acesso multiplataforma
+| Camada | Tecnologias |
+|--------|-------------|
+| Backend | PHP 8.x / Laravel 10 |
+| Banco de dados | MySQL / MariaDB |
+| Frontend | Blade, HTML, CSS, JS |
+| Servidor local | XAMPP |
+| Versionamento | Git / GitHub |
+| Segurança | Auth Laravel + Hashing |
 
 ---
+
+## 🧪 Requisitos para execução
+- PHP >= 8.1
+- Composer
+- MySQL/MariaDB
+- Node.js (opcional para frontend)
+- Git
+
+---
+
+## 🚀 Como rodar o projeto
+
+```bash
+git clone <repositório>
+cd projeto
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
+
 
 ## 📅 Cronograma de Desenvolvimento
 
-| Semana | Atividade |
-|--------|-----------|
-| 1ª | Levantamento de requisitos |
-| 2ª | Modelagem de dados e diagramas |
-| 3ª | Desenvolvimento do backend |
-| 4ª | Desenvolvimento do frontend |
-| 5ª | Integração entre camadas |
-| 6ª | Testes e correções |
-| 7ª | Relatórios e exportação PDF |
-| 8ª | Documentação e entrega final |
 
----
+| Semana | Entrega            |
+| ------ | ------------------ |
+| 1      | Requisitos         |
+| 2      | Modelagem e banco  |
+| 3      | Backend            |
+| 4      | Frontend           |
+| 5      | Integração         |
+| 6      | Testes             |
+| 7      | Relatórios         |
+| 8      | Documentação final |
 
-> Este README documenta a estrutura e funcionalidades reais do sistema, servindo como referência técnica para desenvolvedores, avaliadores e usuários.
+
+
+ # 🧾 Sistema Web de Gestão de Ordens de Serviço para Oficinas Mecânicas
+
+👍 Este projeto foi desenvolvido para fins acadêmicos e profissionais.
+
+
+
+
+
+
+
+
+
