@@ -3,7 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// teste
+Route::get('/debug-check', function () {
+    return config('app.debug') ? 'Debug está ativado' : 'Debug está desativado';
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
