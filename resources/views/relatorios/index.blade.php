@@ -1,31 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto max-w-4xl mt-8">
-    <h1 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">📊 Relatórios</h1>
+<div class="container mx-auto mt-8 max-w-3xl">
+    <h2 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">📊 Relatórios da Oficina</h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <!-- Card de Relatório de Ordens -->
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-            <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Ordens de Serviço</h2>
-            <p class="text-gray-700 dark:text-gray-300 mb-4">Gere um relatório completo em PDF com todas as ordens registradas.</p>
-            <a href="{{ route('ordens.relatorio.pdf') }}"
-               class="inline-block px-5 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-               📄 Gerar PDF
-            </a>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {{-- Relatório por placa --}}
+        <a href="{{ route('relatorios.placa') }}"
+           class="block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-lg shadow text-center transition">
+            🚗 Relatório por Placa
+        </a>
 
-        <!-- Exemplo de outro relatório -->
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-            <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Relatório de Clientes</h2>
-            <p class="text-gray-700 dark:text-gray-300 mb-4">(Exemplo) Relatório com dados dos clientes cadastrados.</p>
-            <button
-                class="px-5 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-                disabled
-            >
-                🚧 Em breve
-            </button>
-        </div>
+        {{-- Relatório por data --}}
+        <a href="{{ route('relatorios.data') }}"
+           class="block bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-6 rounded-lg shadow text-center transition">
+            📅 Relatório por Período
+        </a>
+
+        {{-- Relatório geral de OSs 
+        <a href="{{ route('ordens.relatorio.pdf') }}"
+           class="block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-6 rounded-lg shadow text-center transition">
+            📁 Relatório Geral de OSs
+        </a>
+
+         Relatório personalizado (em breve) 
+        <a href="#" class="block bg-gray-400 text-white font-semibold py-4 px-6 rounded-lg shadow text-center cursor-not-allowed">
+            🛠️ Relatório Personalizado (em breve)
+        </a> --}}
     </div>
 </div>
 @endsection

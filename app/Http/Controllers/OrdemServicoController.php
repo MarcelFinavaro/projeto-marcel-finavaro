@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Mail\RelatorioOrdensMail;
-use App\Models\Cliente;
 use App\Models\OrdemServico;
 use App\Models\Veiculo;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Twilio\Rest\Client;
 
@@ -16,71 +16,92 @@ class OrdemServicoController extends Controller
 {
     public function index()
     {
-        $ordens = OrdemServico::with(['cliente', 'veiculo'])->get();
+        $ordens = OrdemServico::with(['veiculo'])->get();
 
         return view('ordens.index', compact('ordens'));
     }
 
     public function create()
     {
-        $clientes = Cliente::all();
         $veiculos = Veiculo::all();
 
-        return view('ordens.create', compact('clientes', 'veiculos'));
+        return view('ordens.create', compact('veiculos'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
-            'veiculo_id' => 'required|exists:veiculos,placa',
+            'placa' => 'required|string',
             'descricao' => 'required|string|max:1000',
             'data_servico' => 'required|date',
+            'mao_obra' => 'required|numeric|min:0',
         ]);
 
         OrdemServico::create([
-            'cliente_id' => $request->cliente_id,
-            'veiculo_id' => $request->veiculo_id,
+            'veiculo_placa' => $request->placa,
             'descricao' => $request->descricao,
             'data_servico' => $request->data_servico,
+            'mao_obra' => $request->mao_obra,
         ]);
 
-        return redirect()->route('ordens.index')->with('success', 'Ordem de serviço cadastrada com sucesso!');
+        return redirect()->route('ordens.index')->with('success', 'Ordem de serviço criada com sucesso!');
     }
 
-    public function edit(OrdemServico $ordem)
+    public function edit($id)
     {
-        $clientes = Cliente::all();
+        $ordem = OrdemServico::with('pecas')->findOrFail($id);
         $veiculos = Veiculo::all();
 
-        return view('ordens.edit', compact('ordem', 'clientes', 'veiculos'));
+        return view('ordens.edit', compact('ordem', 'veiculos'));
     }
 
     public function update(Request $request, OrdemServico $ordem)
     {
         $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
-            'veiculo_id' => 'required|exists:veiculos,placa',
             'descricao' => 'required|string|max:1000',
             'data_servico' => 'required|date',
+            'mao_obra' => 'required|numeric|min:0',
         ]);
 
-        $ordem->update($request->all());
+        DB::transaction(function () use ($request, $ordem) {
+            // Atualiza os dados principais da OS
+            $ordem->update([
+                'descricao' => $request->descricao,
+                'data_servico' => $request->data_servico,
+                'mao_obra' => $request->mao_obra,
+            ]);
+
+            // Remove todas as peças anteriores
+            $ordem->pecas()->delete();
+
+            // Reinsere as peças, se houver
+            if ($request->has('pecas')) {
+                foreach ($request->pecas as $peca) {
+                    if (!empty($peca['nome_peca'])) {
+                        $ordem->pecas()->create([
+                            'nome_peca' => $peca['nome_peca'],
+                            'quantidade' => $peca['quantidade'],
+                            'preco_unitario' => $peca['preco_unitario'],
+                        ]);
+                    }
+                }
+            }
+        });
 
         return redirect()->route('ordens.index')->with('success', 'Ordem de serviço atualizada com sucesso!');
     }
 
-    public function destroy(OrdemServico $ordem)
+    public function destroy($id)
     {
+        $ordem = OrdemServico::findOrFail($id);
         $ordem->delete();
 
         return redirect()->route('ordens.index')->with('success', 'Ordem de serviço excluída com sucesso!');
     }
 
-    // ✅ Gera o PDF
     public function gerarRelatorioPDF()
     {
-        $ordens = OrdemServico::with(['cliente', 'veiculo'])->get();
+        $ordens = OrdemServico::with(['veiculo'])->get();
         $html = view('relatorios.ordens', compact('ordens'))->render();
 
         $options = new Options();
@@ -96,7 +117,6 @@ class OrdemServicoController extends Controller
             ->header('Content-Disposition', 'attachment; filename="relatorio_ordens.pdf"');
     }
 
-    // ✅ Envia o PDF por e-mail
     public function enviarRelatorioPorEmail()
     {
         Mail::to('destinatario@example.com')->send(new RelatorioOrdensMail());
@@ -104,10 +124,9 @@ class OrdemServicoController extends Controller
         return redirect()->route('ordens.index')->with('success', 'Relatório enviado por e-mail!');
     }
 
-    // ✅ Envia o link do PDF por WhatsApp (Twilio)
     public function enviarRelatorioPorWhatsApp()
     {
-        $ordens = OrdemServico::with(['cliente', 'veiculo'])->get();
+        $ordens = OrdemServico::with(['veiculo'])->get();
         $html = view('relatorios.ordens', compact('ordens'))->render();
 
         $options = new Options();
@@ -135,5 +154,26 @@ class OrdemServicoController extends Controller
         );
 
         return redirect()->route('ordens.index')->with('success', 'Relatório enviado por WhatsApp!');
+    }
+
+    public function buscarPorPlaca(Request $request)
+    {
+        $placa = $request->input('placa');
+
+        if (!$placa) {
+            return redirect()->route('ordens.index')->with('error', 'Informe uma placa para buscar.');
+        }
+
+        $veiculo = Veiculo::where('placa', $placa)->first();
+
+        if (!$veiculo) {
+            return redirect()->route('ordens.index')->with('error', 'Veículo com essa placa não encontrado.');
+        }
+
+        $ordens = OrdemServico::where('veiculo_placa', $veiculo->placa)
+            ->with(['veiculo'])
+            ->get();
+
+        return view('ordens.index', compact('ordens'));
     }
 }

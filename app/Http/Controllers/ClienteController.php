@@ -7,61 +7,114 @@ use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-    // Lista todos os clientes
-    public function index()
+    public function index(Request $request)
     {
-        $clientes = Cliente::all();
+        $query = Cliente::where('user_id', auth()->id());
+
+        if ($request->filled('search')) {
+            $query->where('nome', 'like', '%'.$request->search.'%');
+        }
+
+        $clientes = $query->get();
 
         return view('clientes.index', compact('clientes'));
     }
 
-    // Exibe o formulário de cadastro
     public function create()
     {
-        $clientes = Cliente::all(); // ou o que fizer sentido no seu caso
-
-        return view('clientes.create', compact('clientes'));
+        return view('clientes.create');
     }
 
-    // Salva o cliente no banco
     public function store(Request $request)
     {
         $request->validate([
+            'cpf' => 'required|string|unique:clientes,cpf',
             'nome' => 'required|string|max:255',
             'telefone' => 'required|string|max:20',
             'email' => 'required|email|unique:clientes,email',
         ]);
 
-        Cliente::create($request->all());
+        Cliente::create([
+            'cpf' => $request->cpf,
+            'nome' => $request->nome,
+            'telefone' => $request->telefone,
+            'email' => $request->email,
+            'user_id' => auth()->id(),
+        ]);
 
-        return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
+        return redirect()->route('clientes.index')
+            ->with('success', 'Cliente cadastrado com sucesso!');
     }
 
-    // Exibe o formulário de edição
-    public function edit(Cliente $cliente)
+    public function edit($id)
     {
+        $cliente = Cliente::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
         return view('clientes.edit', compact('cliente'));
     }
 
-    // Atualiza os dados do cliente
-    public function update(Request $request, Cliente $cliente)
+    public function update(Request $request, $id)
     {
+        $cliente = Cliente::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
         $request->validate([
+            'cpf' => 'required|string|unique:clientes,cpf,'.$cliente->id,
             'nome' => 'required|string|max:255',
             'telefone' => 'required|string|max:20',
             'email' => 'required|email|unique:clientes,email,'.$cliente->id,
         ]);
 
-        $cliente->update($request->all());
+        $cliente->update([
+            'cpf' => $request->cpf,
+            'nome' => $request->nome,
+            'telefone' => $request->telefone,
+            'email' => $request->email,
+        ]);
 
-        return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
+        return redirect()->route('clientes.index')
+            ->with('success', 'Cliente atualizado com sucesso!');
     }
 
-    // Exclui o cliente
-    public function destroy(Cliente $cliente)
+    public function destroy($id)
     {
+        $cliente = Cliente::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
         $cliente->delete();
 
-        return redirect()->route('clientes.index')->with('success', 'Cliente excluído com sucesso!');
+        return redirect()->route('clientes.index')
+            ->with('success', 'Cliente excluído com sucesso!');
+    }
+
+    public function buscarPorNome(Request $request)
+    {
+        $nome = $request->input('nome');
+
+        $clientes = Cliente::where('user_id', auth()->id())
+            ->where('nome', 'like', "%{$nome}%")
+            ->get();
+
+        return view('clientes.index', compact('clientes'));
+    }
+
+    public function buscarPorCpf(Request $request)
+    {
+        $cpf = $request->input('cpf');
+
+        $cliente = Cliente::where('user_id', auth()->id())
+            ->where('cpf', $cpf)
+            ->first();
+
+        if ($cliente) {
+            return view('clientes.index', ['clientes' => [$cliente]]);
+        }
+
+        return redirect()->route('clientes.index')
+            ->with('error', 'Cliente com o CPF informado não foi encontrado.');
     }
 }

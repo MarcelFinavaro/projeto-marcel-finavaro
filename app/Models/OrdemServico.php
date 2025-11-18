@@ -9,18 +9,32 @@ class OrdemServico extends Model
 {
     use HasFactory;
 
-    // Campos que podem ser preenchidos em massa
-    protected $fillable = ['cliente_id', 'veiculo_id', 'descricao', 'data_servico'];
+    protected $fillable = [
+        'veiculo_placa',
+        'descricao',
+        'data_servico',
+        'mao_obra',
+        // 'valor_total', // se decidir salvar o total calculado
+    ];
 
-    // Relacionamento com Cliente
+    /*
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class);
+        return $this->belongsTo(Cliente::class, 'cpf', 'cpf');
     }
-
-    // Relacionamento com Veículo usando 'placa' como chave primária
+    */
     public function veiculo()
     {
-        return $this->belongsTo(Veiculo::class, 'veiculo_id', 'placa');
+        return $this->belongsTo(Veiculo::class, 'veiculo_placa', 'placa');
+    }
+
+    public function pecas()
+    {
+        return $this->hasMany(PecaOS::class);
+    }
+
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 }

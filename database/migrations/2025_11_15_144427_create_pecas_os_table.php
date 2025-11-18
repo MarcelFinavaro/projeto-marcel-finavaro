@@ -10,11 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('clientes', function (Blueprint $table) {
-            $table->string('cpf')->primary(); // CPF como chave primária
-            $table->string('nome');
-            $table->string('telefone');
-            $table->string('email')->unique();
+        Schema::create('pecas_os', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('ordem_servico_id')->constrained('ordem_servicos')->onDelete('cascade');
+            $table->string('nome_peca');
+            $table->integer('quantidade');
+            $table->decimal('preco_unitario', 10, 2);
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('clientes');
+        Schema::dropIfExists('pecas_os');
     }
 };

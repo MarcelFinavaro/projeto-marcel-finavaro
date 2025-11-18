@@ -1,56 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>Editar Veículo</h2>
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('veiculos.update', $veiculo->placa) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-        <div class="mb-3">
-            <label for="placa" class="form-label">Placa</label>
-            <input type="text" name="placa" id="placa" value="{{ $veiculo->placa }}" class="form-control" readonly>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-10">
+    <div class="w-full max-w-xl bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-500 text-white text-center py-4">
+            <h2 class="text-2xl font-bold">Editar Veículo</h2>
         </div>
 
-        <div class="mb-3">
-            <label for="modelo" class="form-label">Modelo</label>
-            <input type="text" name="modelo" id="modelo" value="{{ $veiculo->modelo }}" class="form-control">
-        </div>
+        <div class="p-6">
+            @if ($errors->any())
+                <div class="bg-yellow-100 text-yellow-800 p-3 rounded-md mb-4">
+                    <ul class="list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-        <div class="mb-3">
-            <label for="marca" class="form-label">Marca</label>
-            <input type="text" name="marca" id="marca" value="{{ $veiculo->marca }}" class="form-control">
+            {{-- ✅ Formulário reutilizável --}}
+            @include('veiculos._form', [
+                'action' => route('veiculos.update', $veiculo->placa),
+                'method' => 'PUT',
+                'buttonText' => 'Salvar Alterações',
+                'veiculo' => $veiculo,
+                'clientes' => $clientes
+            ])
         </div>
-
-        <div class="mb-3">
-            <label for="ano" class="form-label">Ano</label>
-            <input type="number" name="ano" id="ano" value="{{ $veiculo->ano }}" class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label for="cliente_id" class="form-label">Cliente</label>
-            <select name="cliente_id" id="cliente_id" class="form-control">
-                @foreach($clientes as $cliente)
-                    <option value="{{ $cliente->id }}" {{ $veiculo->cliente_id == $cliente->id ? 'selected' : '' }}>
-                        {{ $cliente->nome }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-        <a href="{{ route('veiculos.index') }}" class="btn btn-secondary">Cancelar</a>
-    </form>
+    </div>
 </div>
 @endsection

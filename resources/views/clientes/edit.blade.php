@@ -1,29 +1,37 @@
-@extends('layouts.app') <!-- Se estiver usando um layout base -->
+@extends('layouts.app')
 
 @section('content')
-    <h1>Editar Cliente</h1>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-10">
+    <div class="w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-500 text-white text-center py-4">
+            <h2 class="text-2xl font-bold">Editar Cliente</h2>
+        </div>
 
-    @if($errors->any())
-        <ul style="color: red;">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
+        <div class="p-6">
+            @if (session('error'))
+                <div class="alert alert-danger text-center mb-3">
+                    {{ session('error') }}
+                </div>
+            @endif
 
-    <form action="{{ route('clientes.update', $cliente->id) }}" method="POST">
-        @csrf
-        @method('PUT')
+            @if ($errors->any())
+                <div class="bg-yellow-100 text-yellow-800 p-3 rounded-md mb-4">
+                    <ul class="list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $erro)
+                            <li>{{ $erro }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-        <label>Nome:</label>
-        <input type="text" name="nome" value="{{ old('nome', $cliente->nome) }}" required><br>
-
-        <label>Telefone:</label>
-        <input type="text" name="telefone" value="{{ old('telefone', $cliente->telefone) }}" required><br>
-
-        <label>Email:</label>
-        <input type="email" name="email" value="{{ old('email', $cliente->email) }}" required><br>
-
-        <button type="submit">Atualizar</button>
-    </form>
+            {{-- ✅ Aqui está a inclusão do formulário padrão --}}
+            @include('clientes._form', [
+                'action' => route('clientes.update', $cliente->id),
+                'method' => 'PUT',
+                'buttonText' => 'Atualizar Cliente',
+                'cliente' => $cliente
+            ])
+        </div>
+    </div>
+</div>
 @endsection

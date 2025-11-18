@@ -1,43 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Cadastrar Novo Veículo</h1>
-
-    @if ($errors->any())
-        <div style="color: red;">
-            <ul>
-                @foreach ($errors->all() as $erro)
-                    <li>{{ $erro }}</li>
-                @endforeach
-            </ul>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-10">
+    <div class="w-full max-w-xl bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-500 text-white text-center py-4">
+            <h2 class="text-2xl font-bold">Cadastrar Novo Veículo</h2>
         </div>
-    @endif
 
-    <form action="{{ route('veiculos.store') }}" method="POST">
-        @csrf
+        <div class="p-6">
+            @if ($errors->any())
+                <div class="bg-yellow-100 text-yellow-800 p-3 rounded-md mb-4">
+                    <ul class="list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $erro)
+                            <li>{{ $erro }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-        <label for="placa">Placa:</label><br>
-        <input type="text" name="placa" value="{{ old('placa') }}"><br><br>
-
-        <label for="modelo">Modelo:</label><br>
-        <input type="text" name="modelo" value="{{ old('modelo') }}"><br><br>
-
-        <label for="marca">Marca:</label><br>
-        <input type="text" name="marca" value="{{ old('marca') }}"><br><br>
-
-        <label for="ano">Ano:</label><br>
-        <input type="number" name="ano" value="{{ old('ano') }}"><br><br>
-
-        <label for="cliente_id">Cliente:</label><br>
-        <select name="cliente_id">
-            <option value="">Selecione um cliente</option>
-            @foreach($clientes as $cliente)
-                <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
-                    {{ $cliente->nome }}
-                </option>
-            @endforeach
-        </select><br><br>
-
-        <button type="submit">Salvar</button>
-    </form>
+            @include('veiculos._form', [
+                'action' => route('veiculos.store'),
+                'method' => 'POST',
+                'buttonText' => 'Salvar Veículo',
+                'clientes' => $clientes
+            ])
+        </div>
+    </div>
+</div>
 @endsection

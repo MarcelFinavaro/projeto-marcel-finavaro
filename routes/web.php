@@ -21,25 +21,31 @@ Route::get('/dashboard', function () {
     return view('dashboard', compact('totalOrdens', 'totalVeiculos'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Rotas protegidas por autenticação
+// 🔐 Rotas protegidas por autenticação
 Route::middleware('auth')->group(function () {
-    // Perfil do usuário
     Route::get('/buscar-veiculo', [VeiculoController::class, 'buscarPorPlaca'])->name('veiculo.buscar');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Recursos principais
-    Route::get('/ordens/relatorio/pdf', [OrdemServicoController::class, 'gerarRelatorioPDF'])->name('ordens.relatorio.pdf');
     Route::resource('clientes', ClienteController::class);
     Route::resource('veiculos', VeiculoController::class);
     Route::resource('ordens', OrdemServicoController::class)->parameters([
         'ordens' => 'ordem',
     ]);
 
-    // Relatórios
+    Route::get('/ordens/buscar', [OrdemServicoController::class, 'buscarPorPlaca'])->name('ordens.buscar');
+    Route::get('/clientes/buscar/nome', [ClienteController::class, 'buscarPorNome'])->name('clientes.buscar.nome');
+    Route::get('/clientes/buscar/cpf', [ClienteController::class, 'buscarPorCpf'])->name('clientes.buscar.cpf');
+
     Route::get('/relatorios', [RelatorioController::class, 'index'])->name('relatorios.index');
+    Route::get('/relatorios/por-placa', [RelatorioController::class, 'formPlaca'])->name('relatorios.placa');
+    Route::post('/relatorios/por-placa', [RelatorioController::class, 'buscarPorPlaca'])->name('relatorios.placa.buscar');
+    Route::get('/relatorios/por-data', [RelatorioController::class, 'formData'])->name('relatorios.data');
+    Route::post('/relatorios/por-data', [RelatorioController::class, 'buscarPorData'])->name('relatorios.data.buscar');
+    Route::post('/relatorios/gerar-pdf', [RelatorioController::class, 'gerarPDF'])->name('relatorios.gerar.pdf');
+    Route::get('/ordens/relatorio/pdf', [OrdemServicoController::class, 'gerarRelatorioPDF'])->name('ordens.relatorio.pdf');
 });
 
-// Autenticação (login, registro, etc.)
+// ✅ Agora fora do grupo protegido
 require __DIR__.'/auth.php';
