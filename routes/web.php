@@ -12,8 +12,11 @@ Route::get('/debug-check', function () {
 });
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
+/*Route::get('/', function () {
+    return view('welcome');
+});*/
 
 // Dashboard com contadores
 Route::get('/veiculos/buscar', [VeiculoController::class, 'buscar'])->name('veiculos.buscar');
