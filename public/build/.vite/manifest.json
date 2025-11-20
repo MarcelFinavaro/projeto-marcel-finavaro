@@ -1,10 +1,10 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-CNUBJXjy.css",
+    "file": "assets/style-CNUBJXjy.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "names": [
-      "app.css"
+      "style.css"
     ]
   },
   "resources/js/app.js": {
