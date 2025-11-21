@@ -104,6 +104,12 @@
             color: #777;
             font-size: 14px;
         }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -111,19 +117,28 @@
         <div class="logo">O.S Oficina</div>
         <h2>Faça login</h2>
         
-        <form>
+        <!-- Form Laravel com CSRF -->
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" value="marcelfinavaro@teste.com">
+                <input type="email" id="email" name="email" value="{{ old('email', 'marcelfinavaro@teste.com') }}" required autofocus>
+                @error('email')
+                    <div class="error-message">{{ $message }}</div>
+                @enderror
             </div>
             
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" placeholder="••••••">
+                <input type="password" id="password" name="password" required placeholder="••••••">
+                @error('password')
+                    <div class="error-message">{{ $message }}</div>
+                @enderror
             </div>
             
             <div class="remember-me">
-                <input type="checkbox" id="remember">
+                <input type="checkbox" id="remember" name="remember">
                 <label for="remember">Lembrar de mim</label>
             </div>
             
@@ -134,20 +149,5 @@
             projecto-marcel-finavaro.onrender.com
         </div>
     </div>
-
-    <script>
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (email && password) {
-                alert('Login realizado com sucesso!');
-                // Aqui você normalmente faria uma requisição para o backend
-            } else {
-                alert('Por favor, preencha todos os campos.');
-            }
-        });
-    </script>
 </body>
 </html>
