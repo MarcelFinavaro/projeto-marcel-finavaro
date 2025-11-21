@@ -32,35 +32,39 @@ Route::get('/test-manual', function () {
 });
 
 // NOVAS ROTAS DE TESTE - adicione junto com as outras
-Route::get('/test-guest-fixed', function () {
-    return '
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Test Guest Fixed</title>
-        @vite(["resources/css/app.css", "resources/js/app.js"])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <h1 class="text-2xl text-blue-600">Guest Layout Test - Se azul, funciona!</h1>
-        </div>
-    </body>
-    </html>
-    ';
-});
+Route::get('/debug-assets', function () {
+    $buildPath = public_path('build');
 
-Route::get('/test-guest-manual', function () {
+    return [
+        'build_directory_exists' => file_exists($buildPath),
+        'build_contents' => file_exists($buildPath) ? scandir($buildPath) : 'NO BUILD DIR',
+        'assets_path' => [
+            'css' => file_exists(public_path('build/assets/app-kUNBWEmv.css')) ? 'EXISTS' : 'NOT FOUND',
+            'js' => file_exists(public_path('build/assets/app-kGY04szw.js')) ? 'EXISTS' : 'NOT FOUND',
+            'manifest' => file_exists(public_path('build/manifest.json')) ? 'EXISTS' : 'NOT FOUND',
+        ],
+        'actual_css_path' => file_exists(public_path('build/assets/app-kUNBWEmv.css')) ?
+            'build/assets/app-kUNBWEmv.css' : 'NOT FOUND',
+        'actual_js_path' => file_exists(public_path('build/assets/app-kGY04szw.js')) ?
+            'build/assets/app-kGY04szw.js' : 'NOT FOUND',
+    ];
+});
+Route::get('/test-dynamic', function () {
+    $cssPath = file_exists(public_path('build/assets/app-kUNBWEmv.css')) ?
+        'build/assets/app-kUNBWEmv.css' : 'build/assets/app.css';
+    $jsPath = file_exists(public_path('build/assets/app-kGY04szw.js')) ?
+        'build/assets/app-kGY04szw.js' : 'build/assets/app.js';
+
     return '
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Test Guest Manual</title>
-        <link href="https://projeto-marcel-finavaro-production-d6ef.up.railway.app/build/assets/app-kUNBWEmv.css" rel="stylesheet">
+        <title>Test Dynamic</title>
+        <link href="'.asset($cssPath).'" rel="stylesheet">
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <h1 class="text-2xl text-blue-600">Guest Manual - Se azul, CSS manual funciona!</h1>
-        </div>
+    <body>
+        <h1 class="text-2xl text-blue-600 bg-red-100 p-4">Test Dynamic - Se azul com fundo vermelho, funciona!</h1>
+        <script src="'.asset($jsPath).'" defer></script>
     </body>
     </html>
     ';
