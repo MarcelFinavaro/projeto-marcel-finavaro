@@ -30,6 +30,41 @@ Route::get('/test-html', function () {
 Route::get('/test-manual', function () {
     return view('test-vite');
 });
+
+// NOVAS ROTAS DE TESTE - adicione junto com as outras
+Route::get('/test-guest-fixed', function () {
+    return '
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Test Guest Fixed</title>
+        @vite(["resources/css/app.css", "resources/js/app.js"])
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+            <h1 class="text-2xl text-blue-600">Guest Layout Test - Se azul, funciona!</h1>
+        </div>
+    </body>
+    </html>
+    ';
+});
+
+Route::get('/test-guest-manual', function () {
+    return '
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Test Guest Manual</title>
+        <link href="https://projeto-marcel-finavaro-production-d6ef.up.railway.app/build/assets/app-kUNBWEmv.css" rel="stylesheet">
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+            <h1 class="text-2xl text-blue-600">Guest Manual - Se azul, CSS manual funciona!</h1>
+        </div>
+    </body>
+    </html>
+    ';
+});
 // FIM DAS ROTAS DE TESTE
 
 Route::get('/debug-check', function () {
