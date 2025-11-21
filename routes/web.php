@@ -71,6 +71,16 @@ Route::get('/test-dynamic', function () {
 });
 // FIM DAS ROTAS DE TESTE
 
+Route::get('/test-csrf', function () {
+    session()->start(); // Force session start
+
+    return [
+        'csrf_token' => csrf_token(),
+        'session_id' => session()->getId(),
+        'session_status' => session()->status(),
+    ];
+});
+
 Route::get('/debug-check', function () {
     return config('app.debug') ? 'Debug está ativado' : 'Debug está desativado';
 });

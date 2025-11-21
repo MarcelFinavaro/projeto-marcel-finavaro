@@ -3,7 +3,19 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}">
-        @csrf
+      <!--  @csrf -->
+            <form method="POST" action="{{ route('login') }}">
+            <input type="hidden" name="_token" id="csrf-token" value="" />
+            <script>
+                // Gera CSRF token manualmente
+                fetch('/test-csrf')
+                    .then(r => r.json())
+                    .then(data => {
+                        document.getElementById('csrf-token').value = data.csrf_token;
+                    });
+            </script>
+            <!-- resto do formulário -->
+        </form>
 
         <!-- Email Address -->
         <div>
