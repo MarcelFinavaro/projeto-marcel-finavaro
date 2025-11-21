@@ -7,93 +7,9 @@ use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\VeiculoController;
 use Illuminate\Support\Facades\Route;
 
-// 🔍 ROTAS DE TESTE TEMPORÁRIAS (adicionar no início)
-Route::get('/test-guest', function () {
-    return view('auth.login');
-});
-
-Route::get('/test-html', function () {
-    return '
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Test</title>
-        @vite(["resources/css/app.css", "resources/js/app.js"])
-    </head>
-    <body>
-        <h1 class="text-2xl text-blue-600 bg-red-100 p-4">Teste Directo - Se isso estiver azul com fundo vermelho, o CSS funciona!</h1>
-    </body>
-    </html>
-    ';
-});
-
-Route::get('/test-manual', function () {
-    return view('test-vite');
-});
-
-// NOVAS ROTAS DE TESTE - adicione junto com as outras
-Route::get('/debug-assets', function () {
-    $buildPath = public_path('build');
-
-    return [
-        'build_directory_exists' => file_exists($buildPath),
-        'build_contents' => file_exists($buildPath) ? scandir($buildPath) : 'NO BUILD DIR',
-        'assets_path' => [
-            'css' => file_exists(public_path('build/assets/app-kUNBWEmv.css')) ? 'EXISTS' : 'NOT FOUND',
-            'js' => file_exists(public_path('build/assets/app-kGY04szw.js')) ? 'EXISTS' : 'NOT FOUND',
-            'manifest' => file_exists(public_path('build/manifest.json')) ? 'EXISTS' : 'NOT FOUND',
-        ],
-        'actual_css_path' => file_exists(public_path('build/assets/app-kUNBWEmv.css')) ?
-            'build/assets/app-kUNBWEmv.css' : 'NOT FOUND',
-        'actual_js_path' => file_exists(public_path('build/assets/app-kGY04szw.js')) ?
-            'build/assets/app-kGY04szw.js' : 'NOT FOUND',
-    ];
-});
-Route::get('/test-dynamic', function () {
-    $cssPath = file_exists(public_path('build/assets/app-kUNBWEmv.css')) ?
-        'build/assets/app-kUNBWEmv.css' : 'build/assets/app.css';
-    $jsPath = file_exists(public_path('build/assets/app-kGY04szw.js')) ?
-        'build/assets/app-kGY04szw.js' : 'build/assets/app.js';
-
-    return '
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Test Dynamic</title>
-        <link href="'.asset($cssPath).'" rel="stylesheet">
-    </head>
-    <body>
-        <h1 class="text-2xl text-blue-600 bg-red-100 p-4">Test Dynamic - Se azul com fundo vermelho, funciona!</h1>
-        <script src="'.asset($jsPath).'" defer></script>
-    </body>
-    </html>
-    ';
-});
-// FIM DAS ROTAS DE TESTE
-
-Route::get('/test-csrf', function () {
-    session()->start(); // Force session start
-
-    return [
-        'csrf_token' => csrf_token(),
-        'session_id' => session()->getId(),
-        'session_status' => session()->status(),
-    ];
-});
-
-Route::get('/debug-check', function () {
-    return config('app.debug') ? 'Debug está ativado' : 'Debug está desativado';
-});
-
 Route::get('/', function () {
     return view('auth.login');
 });
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
-
-// Dashboard com contadores
-Route::get('/veiculos/buscar', [VeiculoController::class, 'buscar'])->name('veiculos.buscar');
 
 Route::get('/dashboard', function () {
     $totalOrdens = App\Models\OrdemServico::count();
@@ -101,6 +17,9 @@ Route::get('/dashboard', function () {
 
     return view('dashboard', compact('totalOrdens', 'totalVeiculos'));
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Dashboard com contadores
+Route::get('/veiculos/buscar', [VeiculoController::class, 'buscar'])->name('veiculos.buscar');
 
 // 🔐 Rotas protegidas por autenticação
 Route::middleware('auth')->group(function () {
@@ -128,5 +47,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/ordens/relatorio/pdf', [OrdemServicoController::class, 'gerarRelatorioPDF'])->name('ordens.relatorio.pdf');
 });
 
-// ✅ Agora fora do grupo protegido
 require __DIR__.'/auth.php';
