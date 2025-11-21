@@ -1,151 +1,139 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O.S Oficina - Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Login - O.S Oficina</title>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
+        body { 
+            font-family: 'Figtree', Arial, sans-serif; 
+            background: #6b7280; /* Cinza mais escuro */
+            margin: 0; 
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
         }
-        
         .login-container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
-            padding: 40px 30px;
         }
-        
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
+        .login-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
-        h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-            font-weight: 500;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 500;
-        }
-        
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            border-color: #4a90e2;
-            outline: none;
-        }
-        
-        .remember-me {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .remember-me input {
-            margin-right: 8px;
-        }
-        
-        .btn-login {
+        .form-input {
             width: 100%;
             padding: 12px;
-            background-color: #4a90e2;
+            margin-bottom: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            font-weight: 500;
         }
-        
-        .btn-login:hover {
-            background-color: #3a7bc8;
+        .btn:hover {
+            background: #0056b3;
         }
-        
-        .footer {
+        .error {
+            color: #dc2626;
+            margin-bottom: 1rem;
+            padding: 10px;
+            background: #fef2f2;
+            border-radius: 4px;
+            border: 1px solid #fecaca;
+        }
+        .logo {
             text-align: center;
-            margin-top: 20px;
-            color: #777;
-            font-size: 14px;
+            margin-bottom: 1.5rem;
         }
-        
-        .error-message {
-            color: #e74c3c;
-            font-size: 14px;
-            margin-top: 5px;
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+        }
+        .label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">O.S Oficina</div>
-        <h2>Faça login</h2>
-        
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="{{ old('email', 'marcelfinavaro@teste.com') }}" required autofocus>
-                @error('email')
-                    <div class="error-message">{{ $message }}</div>
-                @enderror
+        <div class="login-card">
+            <div class="logo">
+                <h1 style="font-size: 1.5rem; color: #1f2937;">
+                    🚗 O.S <span style="color: #f97316;">Oficina</span>
+                </h1>
             </div>
             
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="password" required placeholder="••••••">
-                @error('password')
-                    <div class="error-message">{{ $message }}</div>
-                @enderror
-            </div>
+            <h2>Faça login</h2>
             
-            <div class="remember-me">
-                <input type="checkbox" id="remember" name="remember">
-                <label for="remember">Lembrar de mim</label>
-            </div>
-            
-            <button type="submit" class="btn-login">Entrar</button>
-        </form>
-        
-        <div class="footer">
-            projecto-marcel-finavaro.onrender.com
+            @if($errors->any())
+                <div class="error">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            @if(session('status'))
+                <div style="color: green; margin-bottom: 1rem; padding: 10px; background: #f0fdf4; border-radius: 4px;">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                
+                <!-- Email -->
+                <div>
+                    <label class="label" for="email">Email</label>
+                    <input class="form-input" id="email" type="email" name="email" 
+                           value="{{ old('email', 'marcelfinavaro@teste.com') }}" required autofocus>
+                    @error('email')
+                        <div style="color: red; font-size: 0.875rem; margin-top: 0.25rem;">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="label" for="password">Senha</label>
+                    <input class="form-input" id="password" type="password" name="password" 
+                           value="12345678" required>
+                    @error('password')
+                        <div style="color: red; font-size: 0.875rem; margin-top: 0.25rem;">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Remember Me -->
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" name="remember" style="margin-right: 8px;">
+                        <span style="color: #6b7280;">Lembrar de mim</span>
+                    </label>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn">Entrar</button>
+                </div>
+            </form>
         </div>
     </div>
 </body>
