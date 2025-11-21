@@ -7,6 +7,31 @@ use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\VeiculoController;
 use Illuminate\Support\Facades\Route;
 
+// 🔍 ROTAS DE TESTE TEMPORÁRIAS (adicionar no início)
+Route::get('/test-guest', function () {
+    return view('auth.login');
+});
+
+Route::get('/test-html', function () {
+    return '
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Test</title>
+        @vite(["resources/css/app.css", "resources/js/app.js"])
+    </head>
+    <body>
+        <h1 class="text-2xl text-blue-600 bg-red-100 p-4">Teste Directo - Se isso estiver azul com fundo vermelho, o CSS funciona!</h1>
+    </body>
+    </html>
+    ';
+});
+
+Route::get('/test-manual', function () {
+    return view('test-vite');
+});
+// FIM DAS ROTAS DE TESTE
+
 Route::get('/debug-check', function () {
     return config('app.debug') ? 'Debug está ativado' : 'Debug está desativado';
 });
