@@ -161,10 +161,10 @@
 
 
 
-        <!-- CONTEÚDO PRINCIPAL -->
+        <!-- CONTEÚDO PRINCIPAL 
         <main class="flex-grow px-6 py-8">
             @yield('content')
-        </main>
+        </main> -->
 
         <!-- RODAPÉ INSTITUCIONAL -->
         <section class="bg-gray-100 dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 px-4 py-6 text-center">
