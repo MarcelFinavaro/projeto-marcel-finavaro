@@ -60,11 +60,11 @@
                         </li>
                     @endforeach
 
-                    <li>
+                   <!-- <li>
                         <button id="theme-toggle"
                                 class="px-4 py-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-medium hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-sm">
                             🌗 Tema
-                        </button>
+                        </button> -->
                     </li>
 
                     <li>
