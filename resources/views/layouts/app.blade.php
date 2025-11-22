@@ -264,17 +264,67 @@
 
                 <!-- Área de Conteúdo -->
                 <div class="flex-1 p-6">
-                    <!-- Seção de Apresentação (apenas no dashboard) -->
+                   <!-- Guia do Sistema (apenas no dashboard) -->
                     @if(request()->routeIs('dashboard'))
-                    <section class="max-w-4xl mx-auto mb-8 content-card rounded-xl shadow-xl p-8 text-center">
-                        <h2 class="text-3xl font-bold text-orange-500 mb-4">
-                            Organize sua oficina com mais agilidade!
-                        </h2>
-                        <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                            Gerencie ordens de serviço com eficiência e profissionalismo, 
-                            oferecendo uma experiência moderna e organizada aos seus clientes.
-                        </p>
-                    </section>
+                    <div class="max-w-6xl mx-auto mb-8 content-card rounded-xl shadow-xl p-4 md:p-8">
+                        <div class="text-center mb-6">
+                            <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">🚀 Bem-vindo ao O.S Oficina</h2>
+                            <p class="text-sm md:text-base text-gray-600 dark:text-gray-400">Sistema Web de Gestão de Ordens de Serviço</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
+                            <!-- Passo 1 -->
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-3 md:p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                                <div class="text-xl md:text-2xl mb-2">👥</div>
+                                <h3 class="font-semibold text-blue-800 dark:text-blue-300 mb-1 text-sm md:text-base">1. Cadastre Clientes</h3>
+                                <p class="text-xs md:text-sm text-blue-600 dark:text-blue-400">Registre os dados dos clientes</p>
+                            </div>
+
+                            <!-- Passo 2 -->
+                            <div class="bg-green-50 dark:bg-green-900/20 p-3 md:p-4 rounded-lg border border-green-200 dark:border-green-800">
+                                <div class="text-xl md:text-2xl mb-2">🚗</div>
+                                <h3 class="font-semibold text-green-800 dark:text-green-300 mb-1 text-sm md:text-base">2. Adicione Veículos</h3>
+                                <p class="text-xs md:text-sm text-green-600 dark:text-green-400">Vincule veículos aos clientes</p>
+                            </div>
+
+                            <!-- Passo 3 -->
+                            <div class="bg-orange-50 dark:bg-orange-900/20 p-3 md:p-4 rounded-lg border border-orange-200 dark:border-orange-800">
+                                <div class="text-xl md:text-2xl mb-2">🧾</div>
+                                <h3 class="font-semibold text-orange-800 dark:text-orange-300 mb-1 text-sm md:text-base">3. Crie O.S</h3>
+                                <p class="text-xs md:text-sm text-orange-600 dark:text-orange-400">Registre serviços e peças</p>
+                            </div>
+
+                            <!-- Passo 4 -->
+                            <div class="bg-purple-50 dark:bg-purple-900/20 p-3 md:p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+                                <div class="text-xl md:text-2xl mb-2">📊</div>
+                                <h3 class="font-semibold text-purple-800 dark:text-purple-300 mb-1 text-sm md:text-base">4. Relatórios PDF</h3>
+                                <p class="text-xs md:text-sm text-purple-600 dark:text-purple-400">Exporte para assinatura</p>
+                            </div>
+                        </div>
+
+                        <!-- Benefícios -->
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 md:p-4">
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2 md:mb-3 text-sm md:text-base">🎯 Benefícios do Sistema:</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-green-500 text-sm">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300">Cálculo automático de valores</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-green-500 text-sm">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300">Histórico completo por veículo</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-green-500 text-sm">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300">Relatórios profissionais em PDF</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-green-500 text-sm">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300">Organização total dos registros</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     @endif
 
                     <!-- Conteúdo Dinâmico -->
