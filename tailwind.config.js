@@ -8,7 +8,11 @@ export default {
         './resources/**/*.blade.php',
         './resources/**/*.js',
         './resources/**/*.vue',
+
+        // 🔶 IMPORTANTE — Necessário para o Flowbite funcionar
+        './node_modules/flowbite/**/*.js',
     ],
+
     theme: {
         extend: {
             fontFamily: {
@@ -16,8 +20,12 @@ export default {
             },
         },
     },
+
     plugins: [
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
+
+        // 🔶 Plugin oficial do Flowbite
+        require('flowbite/plugin'),
     ],
 };

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,189 +13,163 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Script de tema automático -->
+    <!-- Tema automático -->
     <script>
         (function() {
             const storedTheme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
                 document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
             }
         })();
     </script>
 </head>
 
-<body class="font-sans antialiased bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-500">
+<body class="font-sans bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition duration-500">
 
-    <div class="min-h-screen flex flex-col">
+<div class="min-h-screen flex flex-col">
 
-        <!-- NAVBAR -->
-        <nav class="backdrop-blur-md bg-gray-200/80 dark:bg-gray-800/70 border-b border-gray-300 dark:border-gray-700 shadow-md sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <span class="text-2xl">🚗</span>
-                    <h1 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-                        O.S <span class="text-orange-500">Oficina</span>
-                    </h1>
-                </div>
+    <!-- 🔶 NAVBAR Principal -->
+    <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-300 dark:border-gray-700 fixed w-full z-50 shadow-sm">
 
-                <ul class="flex space-x-3 items-center">
-                    @php
-                        $links = [
-                            ['Dashboard', route('dashboard')],
-                            ['Clientes', route('clientes.index')],
-                            ['Veículos', route('veiculos.index')],
-                            ['Ordens', route('ordens.index')],
-                            ['Relatórios', route('relatorios.index')],
-                        ];
-                    @endphp
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-                    @foreach ($links as [$label, $url])
-                        <li>
-                            <a href="{{ $url }}"
-                                class="px-4 py-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-medium hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-sm">
-                                {{ $label }}
-                            </a>
-                        </li>
-                    @endforeach
-
-                    <li>
-                        <button id="theme-toggle"
-                                class="px-4 py-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-medium hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-sm">
-                            🌗 Tema
-                        </button>
-                    </li>
-
-                    <li>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit"
-                                    class="px-4 py-2 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition-all duration-300 shadow-md">
-                                🔓 Sair
-                            </button>
-                        </form>
-                    </li>
-                </ul>
+            <!-- LOGO -->
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">🚗</span>
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white">
+                    O.S <span class="text-orange-500">Oficina</span>
+                </h1>
             </div>
-        </nav>
 
-        <!-- SEÇÃO DE APRESENTAÇÃO -->
-        <section class="max-w-4xl mx-auto mt-10 bg-white/90 dark:bg-gray-800/80 rounded-xl shadow-xl p-8 text-center backdrop-blur-md">
-            <h2 class="text-3xl font-bold text-orange-500 mb-4">
-                Organize sua oficina com mais agilidade!
-            </h2>
-            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                Gerencie ordens de serviço com eficiência e profissionalismo, 
-                oferecendo uma experiência moderna e organizada aos seus clientes.
-            </p>
-        </section>
+            <!-- MENU DESKTOP -->
+            <div class="hidden md:flex items-center space-x-2">
 
-        <!-- ÁREA DE PESQUISA DINÂMICA -->
-        @auth
-        <section class="flex flex-col justify-center items-center flex-grow px-4 py-10">
-            <div class="bg-white/90 dark:bg-gray-800/80 backdrop-blur-md rounded-2xl shadow-xl p-8 w-full max-w-md text-center border border-gray-200 dark:border-gray-700">
-                
-               {{-- ===== CLIENTES ===== --}}
-                @if (Route::is('clientes.index'))
-                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">👤 Clientes</h3>
+                @php
+                    $links = [
+                        ['Dashboard', route('dashboard')],
+                        ['Clientes', route('clientes.index')],
+                        ['Veículos', route('veiculos.index')],
+                        ['Ordens', route('ordens.index')],
+                        ['Relatórios', route('relatorios.index')],
+                    ];
+                @endphp
 
-                    <div class="flex justify-center">
-                        <a href="{{ route('clientes.create') }}"
-                            class="px-6 py-3 bg-orange-500 text-white font-semibold rounded-full shadow-md hover:bg-orange-600 active:scale-95 transition-all duration-300">
-                            ➕ Cadastrar Novo Cliente
-                        </a>
-                    </div>
+                @foreach ($links as [$label, $url])
+                <a href="{{ $url }}"
+                   class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-orange-500 hover:text-white transition">
+                    {{ $label }}
+                </a>
+                @endforeach
 
-               
+                <!-- Botão Tema -->
+                <button id="theme-toggle"
+                        class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-orange-500 hover:text-white transition">
+                    🌗
+                </button>
 
-                {{-- ===== VEÍCULOS ===== --}}
-                @elseif (Route::is('veiculos.index'))
-                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">🚘 Buscar Veículo</h3>
-                    <form action="{{ route('veiculos.index') }}" method="GET" class="flex flex-col gap-5">
-                        <div class="flex items-center bg-gray-100 dark:bg-gray-700 rounded-full shadow-inner px-4 py-2 focus-within:ring-2 focus-within:ring-orange-500 transition">
-                            <span class="text-gray-400 dark:text-gray-300 mr-2">🔤</span>
-                            <input type="text" name="placa" maxlength="8" placeholder="Digite a placa (ex: ABC1D23)"
-                                class="flex-grow bg-transparent focus:outline-none text-center text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm tracking-wide">
-                        </div>
-                        <div class="flex justify-center gap-3">
-                            <a href="{{ route('veiculos.create') }}"
-                                class="px-5 py-2 bg-orange-500 text-white font-semibold rounded-full shadow-md hover:bg-orange-600 active:scale-95 transition-all duration-300">
-                                ➕ Novo Veículo
-                            </a>
-                            <button type="submit"
-                                class="px-5 py-2 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-white rounded-full shadow-md hover:bg-gray-400 dark:hover:bg-gray-500 active:scale-95 transition-all duration-300">
-                                Pesquisar 🔎
-                            </button>
-                        </div>
-                    </form>
+                <!-- Logout -->
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button
+                        class="px-4 py-2 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition">
+                        Sair
+                    </button>
+                </form>
+            </div>
 
-                {{-- ===== ORDENS ===== --}}
-                @elseif (Route::is('ordens.index'))
-                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">🧾 Ordens de Serviço</h3>
-                    <form action="{{ route('ordens.index') }}" method="GET" class="flex flex-col gap-5">
-                        <div class="flex items-center bg-gray-100 dark:bg-gray-700 rounded-full shadow-inner px-4 py-2 focus-within:ring-2 focus-within:ring-orange-500 transition">
-                            <span class="text-gray-400 dark:text-gray-300 mr-2">🔎</span>
-                            <input type="text" name="ordem" placeholder="Buscar por número ou cliente"
-                                class="flex-grow bg-transparent focus:outline-none text-center text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm tracking-wide">
-                        </div>
-                        <div class="flex justify-center gap-3">
-                            <a href="{{ route('ordens.create') }}"
-                                class="px-5 py-2 bg-orange-500 text-white font-semibold rounded-full shadow-md hover:bg-orange-600 active:scale-95 transition-all duration-300">
-                                ➕ Nova Ordem
-                            </a>
-                            <button type="submit"
-                                class="px-5 py-2 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-white rounded-full shadow-md hover:bg-gray-400 dark:hover:bg-gray-500 active:scale-95 transition-all duration-300">
-                                Pesquisar 🔍
-                            </button>
-                        </div>
-                    </form>
-                    
-                {{-- ===== RELATÓRIOS ===== --}}
-                @elseif (Route::is('relatorios.index'))
-                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">📊 Relatórios</h3>
-                @endif
-                </div>
+            <!-- MENU MOBILE - HAMBÚRGUER -->
+            <button data-collapse-toggle="mobile-menu" type="button"
+                    class="md:hidden p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+                ☰
+            </button>
+        </div>
+
+        <!-- DROPDOWN MOBILE -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
+
+            @foreach ($links as [$label, $url])
+            <a href="{{ $url }}"
+               class="block w-full px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-orange-500 hover:text-white transition">
+                {{ $label }}
+            </a>
+            @endforeach
+
+            <!-- Tema -->
+            <button id="theme-toggle-mobile"
+                    class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-orange-500 hover:text-white transition">
+                🌗 Alternar Tema
+            </button>
+
+            <!-- Logout -->
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button
+                    class="w-full px-4 py-2 mt-1 rounded-lg bg-red-500 text-white hover:bg-red-600 transition">
+                    Sair
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Espaço abaixo da navbar -->
+    <div class="pt-24"></div>
+
+    <!-- 🔶 TEXTO DA PÁGINA PRINCIPAL (APENAS EM ROTAS PERMITIDAS) -->
+    @auth
+        @if (!Route::is('clientes.index')
+            && !Route::is('veiculos.index')
+            && !Route::is('ordens.index')
+            && !Route::is('relatorios.index'))
+            <section class="max-w-4xl mx-auto mt-6 bg-white/90 dark:bg-gray-800/80 rounded-xl shadow p-8 text-center">
+                <h2 class="text-3xl font-bold text-orange-500 mb-3">
+                    Agilidade e organização para sua oficina!
+                </h2>
+                <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                    Este sistema permite gerenciar clientes, veículos e ordens de serviço de forma simples,
+                    moderna e totalmente integrada, trazendo mais controle e eficiência para sua oficina mecânica.
+                </p>
             </section>
-           @endauth
+        @endif
+    @endauth
 
+    <!-- 🔶 ÁREA DINÂMICA DE PESQUISAS E CADASTROS -->
+    <main class="flex-grow px-6 py-8">
+        @yield('content')
+    </main>
 
-        <!-- CONTEÚDO PRINCIPAL -->
-        <main class="flex-grow px-6 py-8">
-            @yield('content')
-        </main>
+    <!-- 🔶 RODAPÉ INSTITUCIONAL -->
+    <section class="bg-gray-100 dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 px-4 py-6 text-center">
+        <h1 class="text-lg font-semibold text-gray-900 dark:text-white">
+            📘 Sistema Web de Gestão de Ordens de Serviço
+        </h1>
+        <p class="text-sm mt-1 text-orange-500 font-medium">
+            Projeto Tecnológico em Desenvolvimento de Sistemas
+        </p>
+        <div class="mt-3 text-xs text-gray-700 dark:text-gray-300">
+            <p><strong class="text-gray-800 dark:text-gray-200">Marcel Fernando Finavaro</strong></p>
+            <p>📧 <a href="mailto:marcelfinavaro@rede.ulbra.br" class="underline hover:text-orange-500">marcelfinavaro@rede.ulbra.br</a></p>
+            <p>📞 <a href="tel:+5551993577787" class="hover:text-orange-500">(51) 99357-7787</a></p>
+        </div>
+    </section>
 
-        <!-- RODAPÉ INSTITUCIONAL -->
-        <section class="bg-gray-100 dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 px-4 py-6 text-center">
-            <h1 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
-                📘 Sistema Web de Gestão de Ordens de Serviço
-            </h1>
-            <p class="text-sm sm:text-base mt-1 text-orange-500 font-medium">
-                Projeto Tecnológico em Desenvolvimento de Sistemas
-            </p>
-            <div class="mt-3 text-xs sm:text-sm text-gray-700 dark:text-gray-300 space-y-1">
-                <p>👨💻 <strong class="text-gray-800 dark:text-gray-200">Marcel Fernando Finavaro</strong></p>
-                <p>📧 <a href="mailto:marcelfinavaro@rede.ulbra.br" class="underline hover:text-orange-500">marcelfinavaro@rede.ulbra.br</a></p>
-                <p>📞 <a href="tel:+5551993577787" class="hover:text-orange-500">Fone: (51) 99357-7787</a></p>
-            </div>
-        </section>
+    <!-- 🔶 FOOTER -->
+    <footer class="bg-gray-200 dark:bg-gray-950 text-center py-4 text-sm text-gray-700 dark:text-gray-400 border-t border-gray-300 dark:border-gray-700">
+        © {{ date('Y') }} O.S Oficina. Todos os direitos reservados.
+    </footer>
+</div>
 
-        <!-- FOOTER -->
-        <footer class="bg-gray-200 dark:bg-gray-950 text-center py-4 text-sm text-gray-700 dark:text-gray-400 border-t border-gray-300 dark:border-gray-700">
-            © {{ date('Y') }} O.S Oficina. Todos os direitos reservados.
-        </footer>
-
-    </div>
-
-    <!-- Script alternância de tema -->
-    <script>
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            const html = document.documentElement;
-            const isDark = html.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-    </script>
+<!-- Alternador de Tema -->
+<script>
+    const toggleTheme = () => {
+        const html = document.documentElement;
+        const isDark = html.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    };
+    document.getElementById('theme-toggle').onclick = toggleTheme;
+    document.getElementById('theme-toggle-mobile').onclick = toggleTheme;
+</script>
 
 </body>
 </html>
