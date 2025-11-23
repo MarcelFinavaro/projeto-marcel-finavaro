@@ -1,29 +1,28 @@
 @extends('layouts.app')
 
+@section('title', 'Ordens de Serviço - O.S Oficina')
+
+@section('page-title', 'Ordens de Serviço')
+@section('page-description', 'Gerencie as ordens de serviço da sua oficina')
+
 @section('content')
-<div class="container mx-auto mt-8">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white text-center">Ordens de Serviço</h2>
+<div class="container mx-auto mt-8 px-4">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white text-center">🧾 Ordens de Serviço</h2>
+
+    <!-- Botão Nova Ordem de Serviço -->
+    <div class="flex justify-center mb-4">
+        <a href="{{ route('ordens.create') }}"
+           class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg shadow-md transition-all duration-300 flex items-center space-x-2">
+            <span>➕</span>
+            <span>Nova Ordem de Serviço</span>
+        </a>
+    </div>
+
     @if (session('error'))
     <div class="mb-4 px-4 py-2 bg-red-100 text-red-800 rounded-full shadow">
         {{ session('error') }}
     </div>
     @endif
-
-    <form method="GET" action="{{ route('ordens.buscar') }}" class="mb-6 flex justify-center">
-    <input
-        type="text"
-        name="placa"
-        placeholder="🔍 Buscar OS por placa"
-        value="{{ request('placa') }}"
-        class="px-4 py-2 border rounded-l-full focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-white"
-    >
-    <button
-        type="submit"
-        class="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-r-full shadow hover:bg-gray-400 dark:hover:bg-gray-600 transition"
-    >
-        Buscar
-    </button>
-    </form>
 
     @if (session('success'))
         <div class="mb-4 px-4 py-2 bg-green-100 text-green-800 rounded-full shadow">
@@ -31,10 +30,21 @@
         </div>
     @endif
 
-    <!--<a href="{{ route('ordens.create') }}"
-       class="inline-block mb-4 px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full shadow hover:bg-gray-400 dark:hover:bg-gray-600 transition">
-       ➕ Nova Ordem de Serviço
-    </a> -->
+    <form method="GET" action="{{ route('ordens.buscar') }}" class="mb-6 flex justify-center">
+        <input
+            type="text"
+            name="placa"
+            placeholder="🔍 Buscar OS por placa"
+            value="{{ request('placa') }}"
+            class="px-4 py-2 border rounded-l-full focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-white"
+        >
+        <button
+            type="submit"
+            class="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-r-full shadow hover:bg-gray-400 dark:hover:bg-gray-600 transition"
+        >
+            Buscar
+        </button>
+    </form>
 
     @if ($ordens->count())
         <div class="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
@@ -83,7 +93,13 @@
             </table>
         </div>
     @else
-        <p class="text-gray-700 dark:text-gray-300 mt-4">Nenhuma ordem de serviço cadastrada.</p>
+        <p class="text-gray-700 dark:text-gray-300 mt-4 text-center">
+            @if(request('placa'))
+                Nenhuma ordem de serviço encontrada para a placa "{{ request('placa') }}"
+            @else
+                Nenhuma ordem de serviço cadastrada.
+            @endif
+        </p>
     @endif
 </div>
 @endsection
